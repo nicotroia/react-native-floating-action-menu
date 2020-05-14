@@ -1,0 +1,29 @@
+{
+  "name": "react-native-floating-menu",
+  "version": "1.0.0",
+  "description": "https://github.com/nicotroia/react-native-floating-menu.git",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicotroia/react-native-floating-menu.git"
+  },
+  "keywords": [
+    "react-native",
+    "javascript",
+    "typescript",
+    "ios",
+    "android",
+    "google",
+    "material",
+    "design"
+  ],
+  "author": "Nico Troia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicotroia/react-native-floating-menu/issues"
+  },
+  "homepage": "https://github.com/nicotroia/react-native-floating-menu#readme"
+}
