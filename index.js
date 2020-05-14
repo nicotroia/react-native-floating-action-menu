@@ -1,4 +1,4 @@
-import FloatingMenu from './src/components/FloatingMenu';
-import FloatingItem from './src/components/FloatingItem';
+import FloatingMenu from './dist/src/components/FloatingMenu';
+import FloatingItem from './dist/src/components/FloatingItem';
 
 export { FloatingMenu, FloatingItem };

@@ -5580,10 +5580,10 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-native-floating-action-menu@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-floating-action-menu/-/react-native-floating-action-menu-1.0.0.tgz#1add49f53e4e85496a37eaed84ab6e5dca8f7164"
-  integrity sha512-pH8YHzj88QEFVyfDl9NrNSW5tjdYOabRv1zG3X49CM/8luif7E8Si/0vRhBYOcL1UNq8ZZhCRSzcM00rWWYcig==
+react-native-floating-action-menu@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-floating-action-menu/-/react-native-floating-action-menu-1.0.1.tgz#256400c4fa96533e177201c7a08d7c0e49d21692"
+  integrity sha512-VSBz4UBux8Xl+WzbW5k81FbAhKsZEA/1JgF9n2VGqQeDqndK6jeWO8w+a/JAKhQkRRTN8+5iHE0T0YytPNlsmg==
 
 react-native-svg@^12.1.0:
   version "12.1.0"
