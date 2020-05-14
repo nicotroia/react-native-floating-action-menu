@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+      "allowSyntheticDefaultImports": true,
+      "baseUrl": "./",
+      "paths": {
+        "@/*": ["src/*"],
+      }
+  },
+  "exclude": [
+      "build",
+      "node_modules",
+      "static",
+      "_pre-production",
+      ".expo",
+      ".expo-shared",
+      ".tmp",
+      ".vscode"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}

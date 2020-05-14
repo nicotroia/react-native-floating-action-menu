@@ -1,6 +1,6 @@
 # react-native-floating-menu
 
-Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy! PRs are welcome -- Thanks for the help.
+Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!
 
 ## Installation
 
