@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '@/constants';
+import { Colors } from '../constants';
 
 const globalStyles = StyleSheet.create({
   safeArea: {

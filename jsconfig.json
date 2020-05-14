@@ -3,7 +3,7 @@
       "allowSyntheticDefaultImports": true,
       "baseUrl": "./",
       "paths": {
-        "@/*": ["src/*"],
+        "@/*": ["./src/*"]
       }
   },
   "exclude": [

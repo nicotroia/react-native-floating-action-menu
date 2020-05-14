@@ -1,8 +1,6 @@
-import { Platform, StatusBar } from 'react-native';
+import { Dimensions, Platform, StatusBar } from 'react-native';
 
-import { Design } from '@/constants';
-
-const { window } = Design;
+const window = Dimensions.get('window');
 
 export const isPortrait = () => {
   return window.height >= window.width;

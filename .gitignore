@@ -1,7 +1,8 @@
-node_modules
-example/node_modules
+lib/
+dist/
+node_modules/
+example/node_modules/
 .DS_Store
-/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

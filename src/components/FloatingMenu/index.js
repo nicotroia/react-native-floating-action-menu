@@ -1,19 +1,15 @@
 import React from 'react';
 import { View, TouchableWithoutFeedback, Animated } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faTimes } from '@fortawesome/pro-regular-svg-icons';
+import { faBars, faTimes } from '@fortawesome/free-regular-svg-icons';
 
-import FloatingItem from '@/components/FloatingItem';
-import { Colors, Design } from '@/constants';
+import FloatingItem from '../../components/FloatingItem';
+import { Colors, Design } from '../../constants';
 
-import globalStyles from '@/styles';
+import globalStyles from '../../styles';
 import styles from './styles';
 
 class FloatingMenu extends React.PureComponent {
-  static defaultProps = {
-    buttonWidth: Design.buttonWidth,
-  };
-
   state = {
     dimmerActive: false,
     menuDown: false,
@@ -24,6 +20,8 @@ class FloatingMenu extends React.PureComponent {
   itemPressAnimations = {};
   itemFanAnimations = {};
   dimmerTimeout = null;
+
+  thisShitSucks = true;
 
   componentDidMount() {
     this.initAnimations();
@@ -237,5 +235,9 @@ class FloatingMenu extends React.PureComponent {
     );
   };
 }
+
+FloatingMenu.defaultProps = {
+  buttonWidth: Design.buttonWidth,
+};
 
 export default FloatingMenu;

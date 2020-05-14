@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Design, Colors } from '@/constants';
+import { Design, Colors } from '../../constants';
 
 const innerWidth = Design.buttonWidth - 12;
 

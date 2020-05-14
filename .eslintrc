@@ -6,7 +6,7 @@
     "jest": true
   },
   "parser": "babel-eslint",
-  "plugins": ["prettier", "react", "jsx-a11y", "import"],
+  "plugins": ["prettier", "react", "jsx-a11y", "import", "transform-react-jsx"],
   "extends": "prettier",
   "rules": {
     "comma-dangle": ["warn", "always-multiline"],

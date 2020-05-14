@@ -1,6 +1,6 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
 
-import { getStatusBarHeight } from '@/helpers';
+import { getStatusBarHeight } from '../helpers';
 
 export const window = Dimensions.get('window');
 export const statusBarHeight =

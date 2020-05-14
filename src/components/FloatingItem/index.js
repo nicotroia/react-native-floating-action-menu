@@ -5,10 +5,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheck } from '@fortawesome/pro-regular-svg-icons';
-import { faQuestion } from '@fortawesome/pro-solid-svg-icons';
+import { faCheck, faQuestion } from '@fortawesome/free-regular-svg-icons';
 
-import globalStyles from '@/styles';
+import globalStyles from '../../styles';
 
 class FloatingItem extends React.PureComponent {
   render() {
