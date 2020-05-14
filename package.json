@@ -1,11 +1,11 @@
 {
   "name": "react-native-floating-action-menu",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "https://github.com/nicotroia/react-native-floating-action-menu.git",
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run watch",
-    "build": "rimraf ./dist && babel ./ --out-dir ./dist --root-mode upward --ignore ./example,./node_modules",
+    "build": "rimraf ./dist && babel ./ --out-dir ./dist --root-mode upward --ignore ./example,./node_modules && cp ./index.d.ts ./dist/index.d.ts",
     "watch": "rimraf ./dist && babel ./ --out-dir ./dist --root-mode upward --ignore ./example,./node_modules --watch",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",

@@ -17,6 +17,8 @@
       ".vscode"
   ],
   "include": [
+    "index.js",
+    "index.d.js",
     "src/**/*"
   ]
 }
