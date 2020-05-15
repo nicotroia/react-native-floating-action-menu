@@ -1,15 +1,11 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
 
-import { getStatusBarHeight } from '../helpers';
-
-export const window = Dimensions.get('window');
-export const statusBarHeight =
-  Platform.OS === 'ios' ? getStatusBarHeight() : StatusBar.currentHeight;
+const window = Dimensions.get('window');
+const buttonWidth =  Math.min(window.width * 0.14, 80);
 
 export const Design = {
   window,
-  statusBarHeight,
-  buttonWidth: Math.min(window.width * 0.14, 80),
+  buttonWidth,
 };
 
 export const Colors = {

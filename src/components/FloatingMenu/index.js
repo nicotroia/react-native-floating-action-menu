@@ -1,18 +1,19 @@
 import React from 'react';
-import { View, TouchableWithoutFeedback, Animated } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-regular-svg-icons';
+import { Text, View, TouchableWithoutFeedback, Animated } from 'react-native';
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+// import { faBars, faTimes } from '@fortawesome/free-regular-svg-icons';
 
-import FloatingItem from '../../components/FloatingItem';
-import { Colors, Design } from '../../constants';
+import FloatingItem from '@/components/FloatingItem';
+import { Colors, Design } from '@/constants';
+import { applyButtonWidth } from '@/helpers';
 
-import globalStyles from '../../styles';
+import globalStyles from '@/styles';
 import styles from './styles';
 
 class FloatingMenu extends React.PureComponent {
   state = {
     dimmerActive: false,
-    menuDown: false,
+    menuButtonDown: false,
     itemsDown: {},
   };
 
@@ -20,8 +21,6 @@ class FloatingMenu extends React.PureComponent {
   itemPressAnimations = {};
   itemFanAnimations = {};
   dimmerTimeout = null;
-
-  thisShitSucks = true;
 
   componentDidMount() {
     this.initAnimations();
@@ -58,43 +57,50 @@ class FloatingMenu extends React.PureComponent {
     }
   };
 
-  handleItemPressIn = (index, animatedValue) => () => {
+  handleItemPressIn = (index, animatedValue, useNativeDriver = false) => () => {
     // Animate in
     Animated.timing(animatedValue, {
       fromValue: 0.0,
       toValue: 1.0,
       duration: 14,
+      useNativeDriver,
     }).start();
 
     if (index === null) {
-      this.setState({ menuDown: true });
+      this.setState({ menuButtonDown: true });
     } else {
       this.setState({ itemsDown: { ...this.state.itemsDown, [index]: true } });
     }
   };
 
-  handleItemPressOut = (index, animatedValue) => () => {
+  handleItemPressOut = (index, animatedValue, useNativeDriver = false) => () => {
     // Animate out
     Animated.timing(animatedValue, {
       fromValue: 1.0,
       toValue: 0.0,
       duration: 142,
+      useNativeDriver,
     }).start();
 
     if (index === null) {
-      this.setState({ menuDown: false });
+      this.setState({ menuButtonDown: false });
     } else {
       this.setState({ itemsDown: { ...this.state.itemsDown, [index]: false } });
     }
   };
 
   handleItemPress = index => () => {
-    const { items } = this.props;
+    const { items, onPress } = this.props;
     const item = items[index];
 
     if (!item) return;
 
-    item.onPress && item.onPress(item, index);
+    if (item.onPress) {
+      item.onPress(item, index);
+    }
+    else if (onPress) {
+      onPress(item, index);
+    }
   };
 
   handleMenuPress = () => {
@@ -112,6 +118,7 @@ class FloatingMenu extends React.PureComponent {
       duration: 142,
       tension: 30,
       friction: 5,
+      useNativeDriver: true,
     };
 
     this.dimmerTimeout && clearTimeout(this.dimmerTimeout);
@@ -135,8 +142,10 @@ class FloatingMenu extends React.PureComponent {
   };
 
   renderItems = () => {
-    const { items, isOpen, buttonWidth } = this.props;
+    const { items, isOpen, buttonWidth, innerWidth, primaryColor } = this.props;
     const { itemsDown, dimmerActive } = this.state;
+
+    if (!dimmerActive) return null;
 
     return items.map((item, index) => {
       return (
@@ -145,8 +154,11 @@ class FloatingMenu extends React.PureComponent {
           key={`item-${index}`}
           index={index}
           isOpen={isOpen || dimmerActive}
-          itemsDown={itemsDown}
+          primaryColor={primaryColor}
           buttonWidth={buttonWidth}
+          innerWidth={innerWidth}
+          numItems={items.length}
+          itemsDown={itemsDown}
           itemFanAnimations={this.itemFanAnimations}
           itemPressAnimations={this.itemPressAnimations}
           onPress={this.handleItemPress(index)}
@@ -164,30 +176,38 @@ class FloatingMenu extends React.PureComponent {
   };
 
   renderMenuButton = () => {
-    const { isOpen } = this.props;
-    const { menuDown } = this.state;
+    const { menuIcon, isOpen, primaryColor, buttonWidth, innerWidth } = this.props;
+    const { menuButtonDown } = this.state;
 
     const backgroundColor = this.menuPressAnimation.interpolate({
       inputRange: [0.0, 1.0],
-      outputRange: ['#ffffff', Colors.primaryColor],
+      outputRange: ['#ffffff', primaryColor],
     });
+    // const content = menuIcon ? (
+    //   <FontAwesomeIcon
+    //     style={styles.menuIcon}
+    //     color={menuButtonDown ? '#fff' : primaryColor}
+    //     icon={menuIcon}
+    //     size={25}
+    //   />
+    // ) : (
+    //   <Text style={globalStyles.missingIcon}>{isOpen ? 'x' : '☰'}</Text>
+    // );
+    const content = menuIcon || (
+      <Text style={globalStyles.missingIcon}>{isOpen ? 'x' : '☰'}</Text>
+    );
 
     return (
-      <View style={styles.buttonOuter}>
+      <View style={[globalStyles.buttonOuter, applyButtonWidth(buttonWidth)]}>
         <TouchableWithoutFeedback
-          style={styles.button}
+          style={globalStyles.button}
           onPressIn={this.handleItemPressIn(null, this.menuPressAnimation)}
           onPressOut={this.handleItemPressOut(null, this.menuPressAnimation)}
           onPress={this.handleMenuPress}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
         >
-          <Animated.View style={[styles.buttonInner, { backgroundColor }]}>
-            <FontAwesomeIcon
-              style={styles.menuIcon}
-              color={menuDown ? '#fff' : Colors.primaryColor}
-              icon={isOpen ? faTimes : faBars}
-              size={25}
-            />
+          <Animated.View style={[globalStyles.buttonInner, applyButtonWidth(innerWidth), { backgroundColor }]}>
+            {content}
           </Animated.View>
         </TouchableWithoutFeedback>
       </View>
@@ -203,7 +223,7 @@ class FloatingMenu extends React.PureComponent {
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [0.0, 1.0],
+        outputRange: [0.5, 1.0],
         extrapolate: 'clamp',
       });
 
@@ -212,9 +232,7 @@ class FloatingMenu extends React.PureComponent {
         disabled={!isOpen}
         onPress={this.handleMenuPress}
       >
-        <Animated.View
-          style={[globalStyles.dimmer, styles.dimmer, { opacity }]}
-        />
+        <Animated.View style={[globalStyles.dimmer, styles.dimmer, { opacity }]} />
       </TouchableWithoutFeedback>
     ) : null;
   };
@@ -222,7 +240,9 @@ class FloatingMenu extends React.PureComponent {
   render = () => {
     const { items } = this.props;
 
-    if (!items || !items.length) return null;
+    // if (!items || !items.length) return null;
+
+    console.log('hello FloatingMenu');
 
     return (
       <View style={styles.container} pointerEvents="box-none">
@@ -237,7 +257,9 @@ class FloatingMenu extends React.PureComponent {
 }
 
 FloatingMenu.defaultProps = {
+  primaryColor: Colors.primaryColor,
   buttonWidth: Design.buttonWidth,
+  innerWidth: Design.buttonWidth - 12,
 };
 
 export default FloatingMenu;

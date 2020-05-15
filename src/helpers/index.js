@@ -1,19 +1,25 @@
-import { Dimensions, Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
-const window = Dimensions.get('window');
+import { Design } from '@/constants';
 
 export const isPortrait = () => {
-  return window.height >= window.width;
+  return Design.window.height >= Design.window.width;
 };
+
+export const applyButtonWidth = (width = Design.buttonWidth) => ({
+  width,
+  height: width,
+  borderRadius: width * 0.5,
+});
 
 export const isIphoneX = () =>
   Platform.OS === 'ios' &&
   !Platform.isPad &&
   !Platform.isTVOS &&
-  (window.height === 812 ||
-    window.width === 812 ||
-    window.height === 896 ||
-    window.width === 896);
+  (Design.window.height === 812 ||
+    Design.window.width === 812 ||
+    Design.window.height === 896 ||
+    Design.window.width === 896);
 
 export const ifIphoneX = (iphoneXStyle, regularStyle) => {
   if (isIphoneX()) return iphoneXStyle;

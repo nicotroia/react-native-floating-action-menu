@@ -3,6 +3,7 @@ import { FloatingItem } from '../FloatingItem/types';
 export interface Props {
   isOpen: boolean;
   items: FloatingItem[],
+  menuIcon?: JSX.Element,
   onToggle: () => void;
 };
 

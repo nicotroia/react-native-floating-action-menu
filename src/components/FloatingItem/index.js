@@ -1,13 +1,17 @@
 import React from 'react';
 import {
+  Text,
   TouchableWithoutFeedback,
   Animated,
   ActivityIndicator,
 } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheck, faQuestion } from '@fortawesome/free-regular-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+// import { faCheck, faQuestion } from '@fortawesome/free-regular-svg-icons';
 
-import globalStyles from '../../styles';
+import { applyButtonWidth } from '@/helpers';
+
+import globalStyles from '@/styles';
+import styles from './styles';
 
 class FloatingItem extends React.PureComponent {
   render() {
@@ -18,7 +22,7 @@ class FloatingItem extends React.PureComponent {
       iconSize,
       iconStyle,
       isPending,
-      isSuccess,
+      // isSuccess,
       isDisabled,
       onPressIn,
       onPressOut,
@@ -26,8 +30,11 @@ class FloatingItem extends React.PureComponent {
       // Props
       index,
       isOpen,
+      numItems,
       itemsDown,
+      innerWidth,
       buttonWidth,
+      primaryColor,
       itemFanAnimations,
       itemPressAnimations,
     } = this.props;
@@ -40,25 +47,25 @@ class FloatingItem extends React.PureComponent {
       pressAnimation &&
       pressAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: ['#ffffff', vars.primaryColor],
+        outputRange: ['#ffffff', primaryColor],
       });
     const translateY =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [(buttonWidth + 14) * (items.length - index), 0],
+        outputRange: [(buttonWidth + 14) * (numItems - index), 0],
       });
     const rotate =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [`${30 * (items.length - index)}deg`, '0deg'],
+        outputRange: [`${30 * (numItems - index)}deg`, '0deg'],
       });
     const oppositeRotate =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [`${-30 * (items.length - index)}deg`, '0deg'],
+        outputRange: [`${-30 * (numItems - index)}deg`, '0deg'],
       });
     const scale =
       fanAnimation &&
@@ -81,32 +88,25 @@ class FloatingItem extends React.PureComponent {
         extrapolate: 'clamp',
       });
 
-    let content = isSuccess ? (
+    let content = icon ? (
       <FontAwesomeIcon
         style={[
           styles.itemIcon,
-          { color: itemDown ? '#fff' : vars.primaryColor, marginTop: 3 },
-        ]}
-        icon={faCheck}
-        size={21}
-      />
-    ) : (
-      <FontAwesomeIcon
-        style={[
-          styles.itemIcon,
-          { color: itemDown ? '#fff' : vars.primaryColor },
+          { color: itemDown ? '#fff' : primaryColor },
           iconStyle,
         ]}
-        icon={icon || faQuestion}
+        icon={icon}
         size={iconSize || 25}
       />
+    ) : (
+      <Text style={globalStyles.missingIcon}>{index}</Text>
     );
 
     if (isPending)
       content = (
         <ActivityIndicator
           size="small"
-          color={vars.primaryColor}
+          color={primaryColor}
           style={styles.activityIndicator}
         />
       );
@@ -115,14 +115,15 @@ class FloatingItem extends React.PureComponent {
       <Animated.View
         key={`item-${index}`}
         style={[
-          styles.buttonOuter,
+          globalStyles.buttonOuter,
+          applyButtonWidth(buttonWidth),
           {
             opacity,
             transform: fanAnimation
               ? [{ translateX: 0 }, { translateY }, { rotate }, { scale }]
               : [],
           },
-          isOpen && (isDisabled || isSuccess) && globalStyles.disabled,
+          isDisabled && globalStyles.disabled,
         ]}
       >
         <Animated.Text
@@ -133,21 +134,21 @@ class FloatingItem extends React.PureComponent {
               opacity: fastOpacity,
               transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],
             },
-            isOpen && (isDisabled || isSuccess) && globalStyles.disabled,
+            isDisabled && globalStyles.disabled,
           ]}
         >
           {label}
         </Animated.Text>
 
         <TouchableWithoutFeedback
-          style={styles.button}
-          disabled={isDisabled || isPending || isSuccess || !isOpen}
+          style={globalStyles.button}
+          disabled={isDisabled || isPending || !isOpen}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
           onPressIn={onPressIn}
           onPressOut={onPressOut}
           onPress={onPress}
         >
-          <Animated.View style={[styles.buttonInner, { backgroundColor }]}>
+          <Animated.View style={[globalStyles.buttonInner, applyButtonWidth(innerWidth), { backgroundColor }]}>
             {content}
           </Animated.View>
         </TouchableWithoutFeedback>

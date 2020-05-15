@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '../constants';
+import { Colors } from '@/constants';
 
 const globalStyles = StyleSheet.create({
   safeArea: {
@@ -63,6 +63,8 @@ const globalStyles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 6,
+    width: '100%',
+    height: '100%',
     backgroundColor: '#ffffffdd',
     flexDirection: 'column',
     alignItems: 'center',
@@ -96,6 +98,45 @@ const globalStyles = StyleSheet.create({
   dark: {
     backgroundColor: Colors.readableBlack,
     tintColor: Colors.readableBlack,
+  },
+
+  buttonOuter: {
+    // width: Design.buttonWidth,
+    // height: Design.buttonWidth,
+    // borderRadius: Design.buttonWidth * 0.5,
+    backgroundColor: '#fff',
+    borderWidth: 3,
+    borderColor: Colors.primaryColor,
+    marginTop: 14,
+    elevation: 5,
+    shadowColor: '#111',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 7,
+  },
+
+  button: {},
+
+  buttonInner: {
+    // width: Design.innerWidth,
+    // height: Design.innerWidth,
+    // borderRadius: Design.innerWidth * 0.5,
+    padding: 9,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 7,
+  },
+
+  missingIcon: {
+    color: Colors.primaryColor,
+    fontSize: 24,
+    lineHeight: 24,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });
 

@@ -4,7 +4,6 @@ import { Design } from '../../constants';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: 'red',
     position: 'absolute',
     top: 0,
     left: 0,

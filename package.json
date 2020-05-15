@@ -1,16 +1,17 @@
 {
   "name": "react-native-floating-action-menu",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "https://github.com/nicotroia/react-native-floating-action-menu.git",
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run watch",
-    "build": "rimraf ./dist && babel ./ --out-dir ./dist --root-mode upward --ignore ./example,./node_modules && cp ./index.d.ts ./dist/index.d.ts",
-    "watch": "rimraf ./dist && babel ./ --out-dir ./dist --root-mode upward --ignore ./example,./node_modules --watch",
+    "build": "rimraf ./dist && babel ./src --out-dir ./dist/src && cp ./index.js ./dist/index.js && cp ./index.d.ts ./dist/index.d.ts && cp ./package.json ./dist/package.json",
+    "watch": "rimraf ./dist && babel ./src --out-dir ./dist/src --watch && cp ./package.json ./dist/package.json",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
     "devtools": "react-devtools",
     "example": "cd example/ && npm install && npm start",
+    "prepack": "npm run build",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -38,14 +39,15 @@
     "react": "*",
     "react-native": "*"
   },
-  "dependencies": {},
+  "dependencies": {
+    "metro-react-native-babel-preset": "^0.59.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/plugin-transform-react-jsx": "^7.9.4",
     "babel-eslint": "^10.1.0",
     "babel-plugin-root-import": "^6.5.0",
-    "babel-preset-expo": "^8.1.0",
     "babel-preset-react": "^6.24.1",
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.11.0",
