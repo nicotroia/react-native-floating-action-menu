@@ -1,0 +1,8 @@
+*.js linguist-detectable=true
+*.m linguist-detectable=false
+*.h linguist-detectable=false
+*.r linguist-detectable=false
+*.css linguist-detectable=false
+*.bzl linguist-detectable=false
+*.java linguist-detectable=false
+*Podfile linguist-detectable=false
