@@ -1,4 +1,4 @@
-import { FloatingItem } from '../FloatingItem/types';
+import { FloatingItem } from '@/FloatingItem/types';
 
 export interface Props {
   isOpen: boolean;

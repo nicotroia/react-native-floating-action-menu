@@ -53,19 +53,19 @@ class FloatingItem extends React.PureComponent {
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [(buttonWidth + 14) * (numItems - index), 0],
+        outputRange: [(buttonWidth + 14) * (numItems - index) * 0.5, 0],
       });
     const rotate =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [`${30 * (numItems - index)}deg`, '0deg'],
+        outputRange: [`${15 * (numItems - index)}deg`, '0deg'],
       });
     const oppositeRotate =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [`${-30 * (numItems - index)}deg`, '0deg'],
+        outputRange: [`${-15 * (numItems - index)}deg`, '0deg'],
       });
     const scale =
       fanAnimation &&
@@ -88,18 +88,19 @@ class FloatingItem extends React.PureComponent {
         extrapolate: 'clamp',
       });
 
-    let content = icon ? (
-      <FontAwesomeIcon
-        style={[
-          styles.itemIcon,
-          { color: itemDown ? '#fff' : primaryColor },
-          iconStyle,
-        ]}
-        icon={icon}
-        size={iconSize || 25}
-      />
-    ) : (
-      <Text style={globalStyles.missingIcon}>{index}</Text>
+    // let content = icon ? (
+    //   <FontAwesomeIcon
+    //     style={[
+    //       styles.itemIcon,
+    //       { color: itemDown ? '#fff' : primaryColor },
+    //       iconStyle,
+    //     ]}
+    //     icon={icon}
+    //     size={iconSize || 25}
+    //   />
+    // ) : (
+    let content = icon || (
+      <Text style={[globalStyles.missingIcon, { color: itemDown ? '#fff' : primaryColor }]}>{index}</Text>
     );
 
     if (isPending)

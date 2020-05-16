@@ -16,7 +16,6 @@
     "@fortawesome/react-native-fontawesome": "^0.2.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-floating-action-menu": "file:../react-native-floating-action-menu-1.0.6.tgz",
     "react-native-svg": "^12.1.0"
   },
   "devDependencies": {

@@ -60,7 +60,7 @@ class FloatingMenu extends React.PureComponent {
   handleItemPressIn = (index, animatedValue, useNativeDriver = false) => () => {
     // Animate in
     Animated.timing(animatedValue, {
-      fromValue: 0.0,
+      // fromValue: 0.0,
       toValue: 1.0,
       duration: 14,
       useNativeDriver,
@@ -76,7 +76,7 @@ class FloatingMenu extends React.PureComponent {
   handleItemPressOut = (index, animatedValue, useNativeDriver = false) => () => {
     // Animate out
     Animated.timing(animatedValue, {
-      fromValue: 1.0,
+      // fromValue: 1.0,
       toValue: 0.0,
       duration: 142,
       useNativeDriver,
@@ -90,7 +90,7 @@ class FloatingMenu extends React.PureComponent {
   };
 
   handleItemPress = index => () => {
-    const { items, onPress } = this.props;
+    const { items, onItemPress } = this.props;
     const item = items[index];
 
     if (!item) return;
@@ -98,29 +98,45 @@ class FloatingMenu extends React.PureComponent {
     if (item.onPress) {
       item.onPress(item, index);
     }
-    else if (onPress) {
-      onPress(item, index);
+    else if (onItemPress) {
+      onItemPress(item, index);
     }
   };
 
   handleMenuPress = () => {
-    const isOpen = !this.props.isOpen;
+    const { isOpen, onMenuPress } = this.props
 
-    this.toggleMenu(isOpen);
+    onMenuPress(!isOpen);
   };
 
   toggleMenu = isOpen => {
-    const { items, onToggle } = this.props;
+    const { items } = this.props;
 
     const options = {
       fromValue: isOpen ? 0.0 : 1.0,
       toValue: isOpen ? 1.0 : 0.0,
-      duration: 142,
+      duration: 142 - (Math.max(items.length - 2, 0) * 5),
       tension: 30,
       friction: 5,
       useNativeDriver: true,
     };
 
+    console.log('toggleMenu?', options);
+
+    // Fan items
+    let totalDelay = 0;
+    for (let i = 0; i < items.length; i++) {
+      const delay = (items.length - i - 1) * Math.min(Math.max(40 - (i * 10), 0), 180);
+      console.log('delay', delay);
+      totalDelay = totalDelay + delay;
+      Animated.delay(delay).start(() => {
+        Animated.spring(this.itemFanAnimations[i], options).start();
+      });
+    }
+
+    console.log('totalDelay', totalDelay);
+
+    // Toggle dimmer
     this.dimmerTimeout && clearTimeout(this.dimmerTimeout);
     if (isOpen) {
       this.setState({ dimmerActive: true });
@@ -128,17 +144,8 @@ class FloatingMenu extends React.PureComponent {
       // Deactivate dimmer after animation completes
       this.dimmerTimeout = setTimeout(() => {
         this.setState({ dimmerActive: false });
-      }, 200);
+      }, Math.max(totalDelay, 180));
     }
-
-    // Fan items
-    for (let i = 0; i < items.length; i++) {
-      Animated.delay((items.length - i) * 80).start(() => {
-        Animated.spring(this.itemFanAnimations[i], options).start();
-      });
-    }
-
-    onToggle && isOpen !== this.props.isOpen && onToggle(isOpen);
   };
 
   renderItems = () => {
@@ -194,7 +201,7 @@ class FloatingMenu extends React.PureComponent {
     //   <Text style={globalStyles.missingIcon}>{isOpen ? 'x' : '☰'}</Text>
     // );
     const content = menuIcon || (
-      <Text style={globalStyles.missingIcon}>{isOpen ? 'x' : '☰'}</Text>
+      <Text style={[globalStyles.missingIcon, isOpen ? styles.closeIcon : styles.menuIcon, { color: menuButtonDown ? '#fff' : primaryColor }]}>{isOpen ? '×' : '☰'}</Text>
     );
 
     return (
@@ -242,7 +249,7 @@ class FloatingMenu extends React.PureComponent {
 
     // if (!items || !items.length) return null;
 
-    console.log('hello FloatingMenu');
+    console.log('hello demo FloatingMenu');
 
     return (
       <View style={styles.container} pointerEvents="box-none">

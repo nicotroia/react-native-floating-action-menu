@@ -133,10 +133,9 @@ const globalStyles = StyleSheet.create({
 
   missingIcon: {
     color: Colors.primaryColor,
-    fontSize: 24,
-    lineHeight: 24,
-    fontWeight: 'bold',
-    alignSelf: 'center',
+    fontSize: 22,
+    lineHeight: 28,
+    textAlign: 'center',
   },
 });
 

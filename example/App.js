@@ -16,19 +16,20 @@ import {
   StatusBar,
 } from 'react-native';
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
-import { FloatingMenu } from 'react-native-floating-action-menu';
+// import { FloatingMenu } from 'react-native-floating-action-menu';
+// import FloatingMenu from './src/components/FloatingMenu';
 
 const getItems = _this => [
-  {
-    label: 'Get down tonight',
-    icon: '', // faUserPlus,
-    iconSize: 28,
-  },
-  {
-    label: 'Make a lil love',
-    icon: '', // faUserPlus,
-    iconSize: 28,
-  },
+  // {
+  //   label: 'Get down tonight',
+  //   icon: '', // faUserPlus,
+  //   iconSize: 28,
+  // },
+  // {
+  //   label: 'Make a lil love',
+  //   icon: '', // faUserPlus,
+  //   iconSize: 28,
+  // },
   {
     label: 'Do a little dance',
     icon: '', // faUserPlus,
@@ -61,6 +62,8 @@ class App extends React.PureComponent {
 
   handleItemPress = (item, index) => {
     console.log('pressed', item, index);
+
+    this.setState({ isMenuOpen: false });
   }
 
   render() {
@@ -84,8 +87,8 @@ class App extends React.PureComponent {
           <FloatingMenu
             isOpen={isMenuOpen}
             items={items}
-            onToggle={this.handleMenuToggle}
-            onPress={this.handleItemPress}
+            onMenuPress={this.handleMenuToggle}
+            onItemPress={this.handleItemPress}
           />
         </View>
       </SafeAreaView>

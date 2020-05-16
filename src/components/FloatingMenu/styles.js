@@ -1,6 +1,6 @@
 import { StyleSheet, Platform } from 'react-native';
 
-import { Design } from '../../constants';
+import { Design } from '@/constants';
 
 export default StyleSheet.create({
   container: {
@@ -32,8 +32,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
   },
 
-  menuIcon: {},
-
   dimmer: {
     zIndex: 5,
   },
@@ -42,5 +40,15 @@ export default StyleSheet.create({
     width: 30,
     height: 30,
     alignSelf: 'center',
+  },
+
+  closeIcon: {
+    fontSize: 33,
+    lineHeight: 32,
+  },
+  
+  menuIcon: {
+    fontSize: 31,
+    lineHeight: 31,
   },
 });

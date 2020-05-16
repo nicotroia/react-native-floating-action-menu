@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Design, Colors } from '../../constants';
+import { Design, Colors } from '@/constants';
 
 export default StyleSheet.create({
   itemIcon: {
