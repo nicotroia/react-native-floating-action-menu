@@ -25,6 +25,9 @@ class FloatingItem extends React.PureComponent {
       primaryColor,
       itemFanAnimations,
       itemPressAnimations,
+      onPressIn,
+      onPressOut,
+      onPress,
     } = this.props;
     const {
       label,
@@ -33,9 +36,6 @@ class FloatingItem extends React.PureComponent {
       // iconStyle,
       isPending,
       isDisabled,
-      onPressIn,
-      onPressOut,
-      onPress,
     } = item;
 
     const pressAnimation = itemPressAnimations[index];
