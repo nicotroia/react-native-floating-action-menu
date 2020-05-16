@@ -1,6 +1,6 @@
 # react-native-floating-action-menu
 
-100% JS. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!
+100% javascript for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!
 
 ## Installation
 
