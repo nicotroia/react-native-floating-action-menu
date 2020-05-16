@@ -5,8 +5,6 @@ import {
   Animated,
   ActivityIndicator,
 } from 'react-native';
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-// import { faCheck, faQuestion } from '@fortawesome/free-regular-svg-icons';
 
 import { applyButtonWidth } from '@/helpers';
 
@@ -16,18 +14,8 @@ import styles from './styles';
 class FloatingItem extends React.PureComponent {
   render() {
     const {
-      // Item
-      label,
+      item,
       icon,
-      iconSize,
-      iconStyle,
-      isPending,
-      // isSuccess,
-      isDisabled,
-      onPressIn,
-      onPressOut,
-      onPress,
-      // Props
       index,
       isOpen,
       numItems,
@@ -38,6 +26,17 @@ class FloatingItem extends React.PureComponent {
       itemFanAnimations,
       itemPressAnimations,
     } = this.props;
+    const {
+      label,
+      // icon,
+      // iconSize,
+      // iconStyle,
+      isPending,
+      isDisabled,
+      onPressIn,
+      onPressOut,
+      onPress,
+    } = item;
 
     const pressAnimation = itemPressAnimations[index];
     const fanAnimation = itemFanAnimations[index];
@@ -88,19 +87,15 @@ class FloatingItem extends React.PureComponent {
         extrapolate: 'clamp',
       });
 
-    // let content = icon ? (
-    //   <FontAwesomeIcon
-    //     style={[
-    //       styles.itemIcon,
-    //       { color: itemDown ? '#fff' : primaryColor },
-    //       iconStyle,
-    //     ]}
-    //     icon={icon}
-    //     size={iconSize || 25}
-    //   />
-    // ) : (
     let content = icon || (
-      <Text style={[globalStyles.missingIcon, { color: itemDown ? '#fff' : primaryColor }]}>{index}</Text>
+      <Text
+        style={[
+          globalStyles.missingIcon,
+          { color: itemDown ? '#fff' : primaryColor },
+        ]}
+      >
+        {index}
+      </Text>
     );
 
     if (isPending)
@@ -123,6 +118,7 @@ class FloatingItem extends React.PureComponent {
             transform: fanAnimation
               ? [{ translateX: 0 }, { translateY }, { rotate }, { scale }]
               : [],
+            borderColor: primaryColor,
           },
           isDisabled && globalStyles.disabled,
         ]}
@@ -149,7 +145,13 @@ class FloatingItem extends React.PureComponent {
           onPressOut={onPressOut}
           onPress={onPress}
         >
-          <Animated.View style={[globalStyles.buttonInner, applyButtonWidth(innerWidth), { backgroundColor }]}>
+          <Animated.View
+            style={[
+              globalStyles.buttonInner,
+              applyButtonWidth(innerWidth),
+              { backgroundColor },
+            ]}
+          >
             {content}
           </Animated.View>
         </TouchableWithoutFeedback>

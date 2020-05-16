@@ -6,7 +6,7 @@
     "jest": true
   },
   "parser": "babel-eslint",
-  "plugins": ["prettier", "react", "jsx-a11y", "import", "transform-react-jsx"],
+  "plugins": ["prettier", "react", "jsx-a11y", "import"],
   "extends": "prettier",
   "rules": {
     "comma-dangle": ["warn", "always-multiline"],
@@ -27,5 +27,6 @@
     "react/no-deprecated": 0,
     "semi": ["error", "always"],
     "semi-spacing": ["error", { "before": false, "after": true }]
-  }
+  },
+  "ignorePatterns": ["/node_modules/**/*", "/example/**/*"]
 }

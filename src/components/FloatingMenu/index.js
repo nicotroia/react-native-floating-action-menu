@@ -1,7 +1,5 @@
 import React from 'react';
 import { Text, View, TouchableWithoutFeedback, Animated } from 'react-native';
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-// import { faBars, faTimes } from '@fortawesome/free-regular-svg-icons';
 
 import FloatingItem from '@/components/FloatingItem';
 import { Colors, Design } from '@/constants';
@@ -73,7 +71,11 @@ class FloatingMenu extends React.PureComponent {
     }
   };
 
-  handleItemPressOut = (index, animatedValue, useNativeDriver = false) => () => {
+  handleItemPressOut = (
+    index,
+    animatedValue,
+    useNativeDriver = false
+  ) => () => {
     // Animate out
     Animated.timing(animatedValue, {
       // fromValue: 1.0,
@@ -97,14 +99,13 @@ class FloatingMenu extends React.PureComponent {
 
     if (item.onPress) {
       item.onPress(item, index);
-    }
-    else if (onItemPress) {
+    } else if (onItemPress) {
       onItemPress(item, index);
     }
   };
 
   handleMenuPress = () => {
-    const { isOpen, onMenuPress } = this.props
+    const { isOpen, onMenuPress } = this.props;
 
     onMenuPress(!isOpen);
   };
@@ -115,26 +116,22 @@ class FloatingMenu extends React.PureComponent {
     const options = {
       fromValue: isOpen ? 0.0 : 1.0,
       toValue: isOpen ? 1.0 : 0.0,
-      duration: 142 - (Math.max(items.length - 2, 0) * 5),
+      duration: 142 - Math.max(items.length - 2, 0) * 5,
       tension: 30,
       friction: 5,
       useNativeDriver: true,
     };
 
-    console.log('toggleMenu?', options);
-
     // Fan items
     let totalDelay = 0;
     for (let i = 0; i < items.length; i++) {
-      const delay = (items.length - i - 1) * Math.min(Math.max(40 - (i * 10), 0), 180);
-      console.log('delay', delay);
+      const delay =
+        (items.length - i - 1) * Math.min(Math.max(40 - i * 10, 0), 180);
       totalDelay = totalDelay + delay;
       Animated.delay(delay).start(() => {
         Animated.spring(this.itemFanAnimations[i], options).start();
       });
     }
-
-    console.log('totalDelay', totalDelay);
 
     // Toggle dimmer
     this.dimmerTimeout && clearTimeout(this.dimmerTimeout);
@@ -149,7 +146,14 @@ class FloatingMenu extends React.PureComponent {
   };
 
   renderItems = () => {
-    const { items, isOpen, buttonWidth, innerWidth, primaryColor } = this.props;
+    const {
+      items,
+      renderItemIcon,
+      isOpen,
+      buttonWidth,
+      innerWidth,
+      primaryColor,
+    } = this.props;
     const { itemsDown, dimmerActive } = this.state;
 
     if (!dimmerActive) return null;
@@ -157,9 +161,15 @@ class FloatingMenu extends React.PureComponent {
     return items.map((item, index) => {
       return (
         <FloatingItem
-          {...item}
           key={`item-${index}`}
+          {...item}
+          item={item}
           index={index}
+          icon={
+            renderItemIcon
+              ? renderItemIcon({ ...this.state, item, index })
+              : null
+          }
           isOpen={isOpen || dimmerActive}
           primaryColor={primaryColor}
           buttonWidth={buttonWidth}
@@ -183,29 +193,42 @@ class FloatingMenu extends React.PureComponent {
   };
 
   renderMenuButton = () => {
-    const { menuIcon, isOpen, primaryColor, buttonWidth, innerWidth } = this.props;
+    const {
+      renderMenuIcon,
+      isOpen,
+      primaryColor,
+      buttonWidth,
+      innerWidth,
+    } = this.props;
     const { menuButtonDown } = this.state;
 
     const backgroundColor = this.menuPressAnimation.interpolate({
       inputRange: [0.0, 1.0],
       outputRange: ['#ffffff', primaryColor],
     });
-    // const content = menuIcon ? (
-    //   <FontAwesomeIcon
-    //     style={styles.menuIcon}
-    //     color={menuButtonDown ? '#fff' : primaryColor}
-    //     icon={menuIcon}
-    //     size={25}
-    //   />
-    // ) : (
-    //   <Text style={globalStyles.missingIcon}>{isOpen ? 'x' : '☰'}</Text>
-    // );
-    const content = menuIcon || (
-      <Text style={[globalStyles.missingIcon, isOpen ? styles.closeIcon : styles.menuIcon, { color: menuButtonDown ? '#fff' : primaryColor }]}>{isOpen ? '×' : '☰'}</Text>
+
+    const content = renderMenuIcon ? (
+      renderMenuIcon({ ...this.state })
+    ) : (
+      <Text
+        style={[
+          globalStyles.missingIcon,
+          isOpen ? styles.closeIcon : styles.menuIcon,
+          { color: menuButtonDown ? '#fff' : primaryColor },
+        ]}
+      >
+        {isOpen ? '×' : '☰'}
+      </Text>
     );
 
     return (
-      <View style={[globalStyles.buttonOuter, applyButtonWidth(buttonWidth)]}>
+      <View
+        style={[
+          globalStyles.buttonOuter,
+          applyButtonWidth(buttonWidth),
+          { borderColor: primaryColor },
+        ]}
+      >
         <TouchableWithoutFeedback
           style={globalStyles.button}
           onPressIn={this.handleItemPressIn(null, this.menuPressAnimation)}
@@ -213,7 +236,13 @@ class FloatingMenu extends React.PureComponent {
           onPress={this.handleMenuPress}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
         >
-          <Animated.View style={[globalStyles.buttonInner, applyButtonWidth(innerWidth), { backgroundColor }]}>
+          <Animated.View
+            style={[
+              globalStyles.buttonInner,
+              applyButtonWidth(innerWidth),
+              { backgroundColor },
+            ]}
+          >
             {content}
           </Animated.View>
         </TouchableWithoutFeedback>
@@ -239,18 +268,14 @@ class FloatingMenu extends React.PureComponent {
         disabled={!isOpen}
         onPress={this.handleMenuPress}
       >
-        <Animated.View style={[globalStyles.dimmer, styles.dimmer, { opacity }]} />
+        <Animated.View
+          style={[globalStyles.dimmer, styles.dimmer, { opacity }]}
+        />
       </TouchableWithoutFeedback>
     ) : null;
   };
 
   render = () => {
-    const { items } = this.props;
-
-    // if (!items || !items.length) return null;
-
-    console.log('hello demo FloatingMenu');
-
     return (
       <View style={styles.container} pointerEvents="box-none">
         <View style={styles.itemContainer} pointerEvents="box-none">

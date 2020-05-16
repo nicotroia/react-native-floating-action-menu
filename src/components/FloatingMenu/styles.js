@@ -46,7 +46,7 @@ export default StyleSheet.create({
     fontSize: 33,
     lineHeight: 32,
   },
-  
+
   menuIcon: {
     fontSize: 31,
     lineHeight: 31,

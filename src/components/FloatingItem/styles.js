@@ -1,13 +1,8 @@
 import { StyleSheet } from 'react-native';
 
-import { Design, Colors } from '@/constants';
+import { Design } from '@/constants';
 
 export default StyleSheet.create({
-  itemIcon: {
-    marginBottom: 2,
-    color: Colors.primaryColor,
-  },
-
   itemLabel: {
     lineHeight: 20,
     width: 150,
