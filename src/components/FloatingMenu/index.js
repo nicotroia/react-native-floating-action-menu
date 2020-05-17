@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, TouchableWithoutFeedback, Animated } from 'react-native';
 
 import FloatingItem from '@/components/FloatingItem';
-import { Colors, Design } from '@/constants';
+import { Colors, Design, MenuPositions } from '@/constants';
 import { applyButtonWidth } from '@/helpers';
 
 import globalStyles from '@/styles';
@@ -114,7 +114,7 @@ class FloatingMenu extends React.PureComponent {
     const { items } = this.props;
 
     const options = {
-      fromValue: isOpen ? 0.0 : 1.0,
+      // fromValue: isOpen ? 0.0 : 1.0,
       toValue: isOpen ? 1.0 : 0.0,
       duration: 142 - Math.max(items.length - 2, 0) * 5,
       tension: 30,
@@ -126,7 +126,7 @@ class FloatingMenu extends React.PureComponent {
     let totalDelay = 0;
     for (let i = 0; i < items.length; i++) {
       const delay =
-        (items.length - i - 1) * Math.min(Math.max(40 - i * 10, 0), 180);
+        (items.length - i - 1) * Math.min(Math.max(40 - i * 8, 0), 180);
       totalDelay = totalDelay + delay;
       Animated.delay(delay).start(() => {
         Animated.spring(this.itemFanAnimations[i], options).start();
@@ -251,7 +251,7 @@ class FloatingMenu extends React.PureComponent {
   };
 
   renderDimmer = () => {
-    const { isOpen } = this.props;
+    const { isOpen, items, dimmerStyle } = this.props;
     const { dimmerActive } = this.state;
 
     const fanAnimation = this.itemFanAnimations[0];
@@ -263,22 +263,38 @@ class FloatingMenu extends React.PureComponent {
         extrapolate: 'clamp',
       });
 
-    return dimmerActive ? (
+    return dimmerActive && items.length ? (
       <TouchableWithoutFeedback
         disabled={!isOpen}
         onPress={this.handleMenuPress}
       >
         <Animated.View
-          style={[globalStyles.dimmer, styles.dimmer, { opacity }]}
+          style={[globalStyles.dimmer, styles.dimmer, dimmerStyle, { opacity }]}
         />
       </TouchableWithoutFeedback>
     ) : null;
   };
 
   render = () => {
+    const { position } = this.props;
+
+    const [vPos, hPos] = position.split('-');
+
+    console.log('vPos', vPos);
+    console.log('hPos', hPos);
+
     return (
       <View style={styles.container} pointerEvents="box-none">
-        <View style={styles.itemContainer} pointerEvents="box-none">
+        <View
+          style={[
+            styles.itemContainer,
+            {
+              [vPos]: 38,
+              [hPos]: 38,
+            },
+          ]}
+          pointerEvents="box-none"
+        >
           {this.renderItems()}
           {this.renderMenuButton()}
         </View>
@@ -292,6 +308,7 @@ FloatingMenu.defaultProps = {
   primaryColor: Colors.primaryColor,
   buttonWidth: Design.buttonWidth,
   innerWidth: Design.buttonWidth - 12,
+  position: MenuPositions.bottomRight,
 };
 
 export default FloatingMenu;

@@ -16,14 +16,6 @@ export default StyleSheet.create({
 
   itemContainer: {
     position: 'absolute',
-    bottom: Platform.select({
-      ios: 32,
-      android: 22,
-    }),
-    right: Platform.select({
-      ios: 38,
-      android: 28,
-    }),
     width: Design.buttonWidth,
     minHeight: Design.buttonWidth,
     zIndex: 7,

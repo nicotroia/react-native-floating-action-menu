@@ -18,8 +18,9 @@
     "@fortawesome/react-native-fontawesome": "^0.2.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-floating-action-menu": "file:../react-native-floating-action-menu-1.0.7.tgz",
-    "react-native-svg": "^12.1.0"
+    "react-native-floating-action-menu": "file:../react-native-floating-action-menu-1.0.10.tgz",
+    "react-native-svg": "^12.1.0",
+    "tinycolor2": "^1.4.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
