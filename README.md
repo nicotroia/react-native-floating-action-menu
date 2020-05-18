@@ -50,12 +50,12 @@ Prop | description | type | default
 --- | --- | --- | ---
 items | array of `Item`s. (See above) | FloatingItem[] | []
 isOpen | control the menu open/closed state | boolean | false
-position, | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | string | 'bottom-right'
-primaryColor, | hex color string | string | '#213A77'
-buttonWidth, | width (and also height) of the button | number | 50
-dimmerStyle, | style the background dimmer element | object | -
-renderMenuIcon, | a function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
-renderItemIcon, | a function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
+position | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | string | 'bottom-right'
+primaryColor | hex color string | string | '#213A77'
+buttonWidth | width (and also height) of the button | number | 50
+dimmerStyle | style the background dimmer element | object | -
+renderMenuIcon | a function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
+renderItemIcon | a function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
 onMenuToggle | function called when the menu has been toggled open or closed | function | -
 onItemPress | function called when a menu item has been pressed | function | -
 
