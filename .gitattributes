@@ -5,4 +5,4 @@
 *.css linguist-detectable=false
 *.bzl linguist-detectable=false
 *.java linguist-detectable=false
-Podfile linguist-vendored
+example/* linguist-vendored
