@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     paddingRight: 10,
   },
-
   colorOptionsInner: {
     width: '100%',
     marginBottom: 21,
@@ -57,6 +56,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 18,
     paddingRight: 10,
+  },
+  positionOptionsInner: {
+    width: '100%',
+    marginBottom: 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 
   swatch: {

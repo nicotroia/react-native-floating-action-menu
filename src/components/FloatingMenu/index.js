@@ -103,9 +103,9 @@ class FloatingMenu extends React.PureComponent {
   };
 
   handleMenuPress = () => {
-    const { isOpen, onMenuPress } = this.props;
+    const { isOpen, onMenuToggle } = this.props;
 
-    onMenuPress(!isOpen);
+    onMenuToggle(!isOpen);
   };
 
   toggleMenu = isOpen => {

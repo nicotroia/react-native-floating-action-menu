@@ -187,7 +187,7 @@ class App extends React.PureComponent {
     return (
       <View style={styles.positionOptionsContainer}>
         <Label active label="Position" style={{marginBottom: 7}} />
-        <View style={styles.colorOptionsContainer}>
+        <View style={styles.positionOptionsInner}>
           {Object.values(constants.MenuPositions).map(
             this.renderPositionOption
           )}
@@ -323,7 +323,7 @@ class App extends React.PureComponent {
             primaryColor={activeColor}
             renderMenuIcon={!noIcons ? this.renderMenuIcon : null}
             renderItemIcon={!noIcons ? this.renderItemIcon : null}
-            onMenuPress={this.handleMenuToggle}
+            onMenuToggle={this.handleMenuToggle}
             onItemPress={this.handleItemPress}
           />
         </View>
