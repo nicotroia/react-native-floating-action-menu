@@ -16,8 +16,8 @@ npm install --save react-native-floating-action-menu
 
 ```js
 <FloatingMenu
-  isOpen={this.state.isMenuOpen}
   items={items}
+  isOpen={this.state.isMenuOpen}
   onMenuToggle={this.handleMenuPress}
   onItemPress={this.handleItemPress}
 />
