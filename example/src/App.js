@@ -112,7 +112,7 @@ class App extends React.PureComponent {
             setTimeout(() => this.setState({isMenuOpen: false}), 80);
           }
         ),
-      Math.random() * 240 + 240
+      Math.random() * 300 + 300
     );
   };
 

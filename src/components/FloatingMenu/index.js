@@ -186,7 +186,7 @@ class FloatingMenu extends React.PureComponent {
           index={index}
           icon={
             renderItemIcon
-              ? renderItemIcon({ ...this.state, item, index })
+              ? renderItemIcon(item, index, { ...this.state })
               : null
           }
           position={position}

@@ -166,8 +166,8 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
   
   ...
   
-  renderItemIcon={itemState => {
-    const { item, index, itemsDown, menuButtonDown, dimmerActive } = itemState;
+  renderItemIcon={(item, index, menuState) => {
+    const { itemsDown, menuButtonDown, dimmerActive } = menuState;
     const { icon, size, color } = item; // Assuming you append `icon`, `size`, and `color`.
 
     return (
