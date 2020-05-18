@@ -1,10 +1,13 @@
 
 <div align="center">
   <h1>react-native-floating-action-menu</h1>
+  
+  <div>100% javascript component for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!</div>
+  
+  <br/>
+
   <img src="example/src/assets/readme-0.gif" alt="Floating Action Menu demo" height="480" />
 </div>
-
-100% javascript component for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!
 
 ## Installation
 
@@ -59,8 +62,33 @@ renderItemIcon | a function used to render the icon for the items. Receives item
 onMenuToggle | function called when the menu has been toggled open or closed | function | -
 onItemPress | function called when a menu item has been pressed | function | -
 
+## Gif Demos
 
-## Quick Example
+<table>
+<thead />
+<tbody>
+<tr>
+  <td style="width: 25%;">
+    <b>Positions</b>
+    <img src="example/src/assets/readme-2.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+  </td>
+  <td style="width: 25%;">
+    <b>FontAwesome</b>
+    <img src="example/src/assets/readme-3.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+  </td>
+  <td style="width: 25%;">
+    <b>Colors</b>
+    <img src="example/src/assets/readme-4.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+  </td>
+  <td style="width: 25%;">
+    <b>List lengths</b>
+    <img src="example/src/assets/readme-5.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+  </td>
+</tr>
+</tbody>
+</table>
+
+## Quick Start Example
 
 ```js
 import React from 'react';
@@ -109,7 +137,7 @@ export default Example;
 
 ```
 
-## Example rendering FontAwesome Icons
+## Example rendering FontAwesome icons
 
 ```
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -152,10 +180,6 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 ```
 
 ## Full Example
-
-<div align="center">
-  <img src="example/src/assets/readme-1.gif" alt="Example project demo" height="480" />
-</div>
 
  - git clone https://github.com/nicotroia/react-native-floating-action-menu
  - cd react-native-floating-action-menu/example
