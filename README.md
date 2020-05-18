@@ -18,6 +18,8 @@ npm install --save react-native-floating-action-menu
 ## Usage
 
 ```js
+import { FloatingMenu } from 'react-native-floating-action-menu';
+
 <FloatingMenu
   items={items}
   isOpen={this.state.isMenuOpen}
