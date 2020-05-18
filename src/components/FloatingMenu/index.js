@@ -313,6 +313,7 @@ class FloatingMenu extends React.PureComponent {
 }
 
 FloatingMenu.defaultProps = {
+  items: [],
   primaryColor: Colors.primaryColor,
   buttonWidth: Design.buttonWidth,
   innerWidth: Design.buttonWidth - 12,
