@@ -106,7 +106,7 @@ class Example extends React.Component {
     console.log('pressed item', item);
 
   render() {
-    let items = [
+    const items = [
       { label: 'Do a little dance' },
       { label: 'Make a lil love' },
       { label: 'Get down tonight' },
