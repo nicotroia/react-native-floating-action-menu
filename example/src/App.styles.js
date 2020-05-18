@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { constants } from 'react-native-floating-action-menu';
+import {StyleSheet} from 'react-native';
+import {constants} from 'react-native-floating-action-menu';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,6 +36,14 @@ const styles = StyleSheet.create({
   },
 
   colorOptionsContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 18,
+    paddingRight: 10,
+  },
+
+  colorOptionsInner: {
     width: '100%',
     marginBottom: 21,
     flexDirection: 'row',
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     marginHorizontal: 10,
   },
-  
+
   positionActive: {
     borderColor: constants.Colors.secondaryColor,
   },

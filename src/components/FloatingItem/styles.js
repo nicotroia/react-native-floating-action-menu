@@ -8,8 +8,6 @@ export default StyleSheet.create({
     width: 150,
     position: 'absolute',
     top: Design.buttonWidth * 0.5 - 12,
-    // textAlign: 'right',
-    // left: -171,
     zIndex: 7,
     transform: [{ rotate: '0deg' }],
   },

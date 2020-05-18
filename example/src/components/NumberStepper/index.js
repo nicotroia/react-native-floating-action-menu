@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { globalStyles } from 'react-native-floating-action-menu';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {globalStyles} from 'react-native-floating-action-menu';
 
 import styles from './styles';
 
@@ -16,7 +16,7 @@ class NumberStepper extends React.PureComponent {
   decrementIntervalTimer = null;
 
   increment = () => {
-    const { value, onChange, max } = this.props;
+    const {value, onChange, max} = this.props;
 
     let newVal = value + 1;
     if (newVal > max) {
@@ -27,7 +27,7 @@ class NumberStepper extends React.PureComponent {
   };
 
   decrement = () => {
-    const { value, onChange, min } = this.props;
+    const {value, onChange, min} = this.props;
 
     let newVal = value - 1;
     if (newVal < min) {
@@ -88,7 +88,7 @@ class NumberStepper extends React.PureComponent {
   };
 
   render() {
-    const { value, min, max } = this.props;
+    const {value, min, max} = this.props;
 
     const decrementDisabled = value <= min;
     const incrementDisabled = value >= max;
@@ -98,10 +98,9 @@ class NumberStepper extends React.PureComponent {
         <TouchableOpacity
           onPressIn={this.handleDecrementPressIn}
           onPressOut={this.stopDecrementTimer}
-          hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
           disabled={decrementDisabled}
-          style={decrementDisabled ? styles.disabled : null}
-        >
+          style={decrementDisabled ? styles.disabled : null}>
           <FontAwesomeIcon
             style={styles.decrementButton}
             size={24}
@@ -112,10 +111,9 @@ class NumberStepper extends React.PureComponent {
         <TouchableOpacity
           onPressIn={this.handleIncrementPressIn}
           onPressOut={this.stopIncrementTimer}
-          hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
           disabled={incrementDisabled}
-          style={incrementDisabled ? styles.disabled : null}
-        >
+          style={incrementDisabled ? styles.disabled : null}>
           <FontAwesomeIcon
             style={styles.incrementButton}
             size={24}

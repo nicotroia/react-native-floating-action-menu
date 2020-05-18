@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native';
-import { constants } from 'react-native-floating-action-menu';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,14 +20,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 24,
     alignSelf: 'center',
-    // color: constants.Colors.primaryColor,
   },
 
   decrementButton: {
     fontSize: 24,
     lineHeight: 24,
     alignSelf: 'center',
-    // color: constants.Colors.primaryColor,
   },
 
   disabled: {

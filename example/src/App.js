@@ -16,7 +16,7 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faTimes,
   faBars,
@@ -26,7 +26,11 @@ import {
   faArrowDown,
   faAmbulance,
 } from '@fortawesome/free-solid-svg-icons';
-import { FloatingMenu, globalStyles, constants } from 'react-native-floating-action-menu';
+import {
+  FloatingMenu,
+  globalStyles,
+  constants,
+} from 'react-native-floating-action-menu';
 import tinycolor from 'tinycolor2';
 
 import Header from './components/Header';
@@ -35,13 +39,7 @@ import NumberStepper from './components/NumberStepper';
 
 import styles from './App.styles';
 
-const colorOptions = [
-  '#F53B57',
-  '#3D40C6',
-  '#10BCF9',
-  '#00D8D6',
-  '#04C56B',
-];
+const colorOptions = ['#F53B57', '#3D40C6', '#10BCF9', '#00D8D6', '#04C56B'];
 const items = [
   {
     label: 'Do it faster',
@@ -97,24 +95,32 @@ class App extends React.PureComponent {
       itemsPending: {
         ...this.state.itemsPending,
         [index]: true,
-      }
+      },
     });
 
     // Simulate an async pending state
-    setTimeout(() => this.setState({
-      itemsPending: {
-        ...this.state.itemsPending,
-        [index]: false,
-      }
-    }, () => {
-      setTimeout(() => this.setState({ isMenuOpen: false }), 80);
-    }), Math.random() * 240 + 240);
+    setTimeout(
+      () =>
+        this.setState(
+          {
+            itemsPending: {
+              ...this.state.itemsPending,
+              [index]: false,
+            },
+          },
+          () => {
+            setTimeout(() => this.setState({isMenuOpen: false}), 80);
+          }
+        ),
+      Math.random() * 240 + 240
+    );
   };
 
-  handleToggleExample = () => this.setState({ noIcons: !this.state.noIcons });
-  handleStepChange = numItemsToShow => this.setState({ numItemsToShow });
-  handleColorChange = activeColor => () => this.setState({ activeColor });
-  handlePositionChange = activePosition => () => this.setState({ activePosition });
+  handleToggleExample = () => this.setState({noIcons: !this.state.noIcons});
+  handleStepChange = numItemsToShow => this.setState({numItemsToShow});
+  handleColorChange = activeColor => () => this.setState({activeColor});
+  handlePositionChange = activePosition => () =>
+    this.setState({activePosition});
 
   renderMenuIcon = menuState => {
     const {isMenuOpen, activeColor} = this.state;
@@ -130,96 +136,87 @@ class App extends React.PureComponent {
   };
 
   renderItemIcon = itemState => {
-    const { activeColor } = this.state;
+    const {activeColor} = this.state;
     const {item, index, itemsDown, dimmerActive} = itemState;
 
-    if (!item.icon && !item.image) return (
-      <Text style={globalStyles.text}>?</Text>
-    );
+    if (!item.icon && !item.image) {
+      return <Text style={globalStyles.text}>?</Text>;
+    }
 
     return item.icon ? (
       <FontAwesomeIcon
-        style={[
-          {color: itemsDown[index] ? '#fff' : activeColor},
-          item.style,
-        ]}
+        style={[{color: itemsDown[index] ? '#fff' : activeColor}, item.style]}
         icon={item.icon}
         size={25}
       />
     ) : (
       <Image
         source={item.image}
-        style={[styles.addIcon, { tintColor: itemsDown[index] ? '#fff' : activeColor }]}
+        style={[
+          styles.addIcon,
+          {tintColor: itemsDown[index] ? '#fff' : activeColor},
+        ]}
         resizeMode="contain"
       />
     );
   };
 
   renderPositionOption = (position, index) => {
-    const { activePosition } = this.state;
+    const {activePosition} = this.state;
 
     const isActive = position === activePosition;
-    
+
     return (
-      <TouchableOpacity key={position} onPress={this.handlePositionChange(position)}>
+      <TouchableOpacity
+        key={position}
+        onPress={this.handlePositionChange(position)}>
         <Text
           style={[
             globalStyles.text,
             globalStyles.link,
             styles.positionOption,
             isActive && styles.positionActive,
-          ]}
-        >
+          ]}>
           {position}
         </Text>
       </TouchableOpacity>
-    )
-  }
-  
+    );
+  };
+
   renderPositionOptions = () => {
     return (
       <View style={styles.positionOptionsContainer}>
-        <Label
-          active
-          label="Position"
-          style={{ marginBottom: 7 }}
-        />
+        <Label active label="Position" style={{marginBottom: 7}} />
         <View style={styles.colorOptionsContainer}>
-          {Object.values(constants.MenuPositions).map(this.renderPositionOption)}
+          {Object.values(constants.MenuPositions).map(
+            this.renderPositionOption
+          )}
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   renderExampleOption = () => {
-    const { noIcons } = this.state;
+    const {noIcons} = this.state;
 
     return (
       <View style={{marginBottom: 21}}>
-        <Label
-          active
-          label="Icon type"
-          style={{ marginBottom: 7 }}
-        />
+        <Label active label="Icon type" style={{marginBottom: 7}} />
         <TouchableOpacity onPress={this.handleToggleExample}>
           <Text style={[globalStyles.text, globalStyles.link]}>
             {noIcons ? 'Default (no icons)' : 'w/ FontAwesome Icons'}
           </Text>
         </TouchableOpacity>
       </View>
-    )
-  }
+    );
+  };
 
   renderNumberStepper = () => {
-    const { numItemsToShow } = this.state;
+    const {numItemsToShow} = this.state;
 
     return (
       <View style={styles.numberStepperContainer}>
-        <Label
-          active
-          label="Number of items"
-          style={{ marginBottom: 7 }}
-        />
+        <Label active label="Number of items" style={{marginBottom: 7}} />
         <NumberStepper
           value={numItemsToShow}
           onChange={this.handleStepChange}
@@ -227,25 +224,28 @@ class App extends React.PureComponent {
           max={8}
         />
       </View>
-    )
-  }
-  
+    );
+  };
+
   renderColorOption = color => {
-    const { activeColor } = this.state;
+    const {activeColor} = this.state;
 
     const tinyC = tinycolor(color);
     const backgroundColor = tinyC.toHexString();
-    const borderColor = tinyC.clone().desaturate(10).toHexString();
+    const borderColor = tinyC
+      .clone()
+      .desaturate(10)
+      .toHexString();
     const size = 42;
 
     const textColor = tinycolor
       .mostReadable(color, [constants.Colors.readableBlack, '#fff'])
       .toHexString();
     const check = (
-      <Text style={{ color: textColor, fontSize: 18 }} adjustsFontSizeToFit>
+      <Text style={{color: textColor, fontSize: 18}} adjustsFontSizeToFit>
         ✔︎
       </Text>
-    )
+    );
 
     return (
       <TouchableOpacity key={color} onPress={this.handleColorChange(color)}>
@@ -259,42 +259,36 @@ class App extends React.PureComponent {
               borderRadius: size / 6,
               backgroundColor,
               borderColor,
-            }
-          ]}
-        >
+            },
+          ]}>
           {color && color.toLowerCase() === activeColor.toLowerCase()
             ? check
             : null}
         </View>
       </TouchableOpacity>
     );
-  }
+  };
 
   renderColorOptions = () => {
     return (
-      <View
-        style={{
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          paddingLeft: 18,
-          paddingRight: 10,
-        }}
-      >
-        <Label
-          active
-          label="Primary color"
-          style={{ marginBottom: 7 }}
-        />
-        <View style={styles.colorOptionsContainer}>
+      <View style={styles.colorOptionsContainer}>
+        <Label active label="Primary color" style={{marginBottom: 7}} />
+        <View style={styles.colorOptionsInner}>
           {colorOptions.map(this.renderColorOption)}
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   render() {
-    const {noIcons, isMenuOpen, numItemsToShow, activePosition, activeColor, itemsPending} = this.state;
+    const {
+      noIcons,
+      isMenuOpen,
+      numItemsToShow,
+      activePosition,
+      activeColor,
+      itemsPending,
+    } = this.state;
 
     let itemsToShow = numItemsToShow > 0 ? items.slice(-numItemsToShow) : [];
     for (let i = 0; i < itemsToShow.length; i++) {
@@ -313,8 +307,7 @@ class App extends React.PureComponent {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}
-            contentContainerStyle={styles.content}
-          >
+            contentContainerStyle={styles.content}>
             <Header />
 
             {this.renderPositionOptions()}

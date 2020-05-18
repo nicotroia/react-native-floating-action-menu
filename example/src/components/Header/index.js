@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -9,8 +8,8 @@
  * @format
  */
 
-import { ImageBackground, StyleSheet, Text } from 'react-native';
-import { constants } from 'react-native-floating-action-menu';
+import {ImageBackground, StyleSheet, Text} from 'react-native';
+import {constants} from 'react-native-floating-action-menu';
 import React from 'react';
 
 const Header = () => {
@@ -19,10 +18,9 @@ const Header = () => {
       accessibilityRole="image"
       source={require('../../assets/logo.png')}
       style={styles.background}
-      imageStyle={styles.logo}
-    >
-      <Text style={[styles.emoji, { marginBottom: 0 }]}>🙋‍♂️</Text>
-      <Text style={[styles.h1, { marginBottom: 21 }]}>
+      imageStyle={styles.logo}>
+      <Text style={[styles.emoji, {marginBottom: 0}]}>🙋‍♂️</Text>
+      <Text style={[styles.h1, {marginBottom: 21}]}>
         react-native-floating-action-menu
       </Text>
     </ImageBackground>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { globalStyles } from 'react-native-floating-action-menu';
+import {View, Text} from 'react-native';
+import {globalStyles} from 'react-native-floating-action-menu';
 
 import styles from './styles';
 
