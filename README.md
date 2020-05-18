@@ -69,19 +69,19 @@ onItemPress | function called when a menu item has been pressed | function | -
 <tbody>
 <tr>
   <td width="25%">
-    <b>Positions</b>
+    <p><b>Positions</b></p>
     <img src="example/src/assets/readme-2.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
   <td width="25%">
-    <b>FontAwesome</b>
+    <p><b>FontAwesome</b></p>
     <img src="example/src/assets/readme-3.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
   <td width="25%">
-    <b>Colors</b>
+    <p><b>Colors</b></p>
     <img src="example/src/assets/readme-4.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
   <td width="25%">
-    <b>List lengths</b>
+    <p><b>List lengths</b></p>
     <img src="example/src/assets/readme-5.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
 </tr>
