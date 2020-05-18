@@ -58,7 +58,6 @@ class FloatingMenu extends React.PureComponent {
   handleItemPressIn = (index, animatedValue, useNativeDriver = false) => () => {
     // Animate in
     Animated.timing(animatedValue, {
-      // fromValue: 0.0,
       toValue: 1.0,
       duration: 14,
       useNativeDriver,
@@ -78,7 +77,6 @@ class FloatingMenu extends React.PureComponent {
   ) => () => {
     // Animate out
     Animated.timing(animatedValue, {
-      // fromValue: 1.0,
       toValue: 0.0,
       duration: 142,
       useNativeDriver,
@@ -114,7 +112,6 @@ class FloatingMenu extends React.PureComponent {
     const { items } = this.props;
 
     const options = {
-      // fromValue: isOpen ? 0.0 : 1.0,
       toValue: isOpen ? 1.0 : 0.0,
       duration: 142 - Math.max(items.length - 2, 0) * 5,
       tension: 30,
@@ -125,9 +122,19 @@ class FloatingMenu extends React.PureComponent {
     // Fan items
     let totalDelay = 0;
     for (let i = 0; i < items.length; i++) {
-      const delay =
-        (items.length - i - 1) * Math.min(Math.max(40 - i * 8, 0), 180);
-      totalDelay = totalDelay + delay;
+      // easeInCubic: t => t*t*t
+      // easeInQuart: t => t*t*t*t,
+      // easeInOutQubic: t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
+      const t = i / items.length;
+      const ease = isOpen
+        ? t < 0.5
+          ? 4 * t * t * t
+          : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+        : t * t * t * t;
+      const time = items.length > 5 ? 240 : 180;
+      const delay = time * ease;
+
+      totalDelay = delay + time;
       Animated.delay(delay).start(() => {
         Animated.spring(this.itemFanAnimations[i], options).start();
       });
@@ -141,15 +148,16 @@ class FloatingMenu extends React.PureComponent {
       // Deactivate dimmer after animation completes
       this.dimmerTimeout = setTimeout(() => {
         this.setState({ dimmerActive: false });
-      }, Math.max(totalDelay, 180));
+      }, totalDelay);
     }
   };
 
   renderItems = () => {
     const {
       items,
-      renderItemIcon,
       isOpen,
+      position,
+      renderItemIcon,
       buttonWidth,
       innerWidth,
       primaryColor,
@@ -170,6 +178,7 @@ class FloatingMenu extends React.PureComponent {
               ? renderItemIcon({ ...this.state, item, index })
               : null
           }
+          position={position}
           isOpen={isOpen || dimmerActive}
           primaryColor={primaryColor}
           buttonWidth={buttonWidth}
@@ -280,9 +289,6 @@ class FloatingMenu extends React.PureComponent {
 
     const [vPos, hPos] = position.split('-');
 
-    console.log('vPos', vPos);
-    console.log('hPos', hPos);
-
     return (
       <View style={styles.container} pointerEvents="box-none">
         <View
@@ -291,6 +297,8 @@ class FloatingMenu extends React.PureComponent {
             {
               [vPos]: 38,
               [hPos]: 38,
+              flexDirection:
+                vPos.toLowerCase() === 'bottom' ? 'column' : 'column-reverse',
             },
           ]}
           pointerEvents="box-none"

@@ -6,10 +6,10 @@ export default StyleSheet.create({
   itemLabel: {
     lineHeight: 20,
     width: 150,
-    textAlign: 'right',
     position: 'absolute',
     top: Design.buttonWidth * 0.5 - 12,
-    left: -171,
+    // textAlign: 'right',
+    // left: -171,
     zIndex: 7,
     transform: [{ rotate: '0deg' }],
   },

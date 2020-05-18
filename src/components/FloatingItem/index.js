@@ -18,6 +18,7 @@ class FloatingItem extends React.PureComponent {
       icon,
       index,
       isOpen,
+      position,
       numItems,
       itemsDown,
       innerWidth,
@@ -41,6 +42,8 @@ class FloatingItem extends React.PureComponent {
     const pressAnimation = itemPressAnimations[index];
     const fanAnimation = itemFanAnimations[index];
     const itemDown = itemsDown[index];
+    const [vPos, hPos] = position.split('-');
+    const multiple = vPos.toLowerCase() === 'bottom' ? 1 : -1;
 
     const backgroundColor =
       pressAnimation &&
@@ -52,19 +55,22 @@ class FloatingItem extends React.PureComponent {
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [(buttonWidth + 14) * (numItems - index) * 0.5, 0],
+        outputRange: [
+          (buttonWidth + 14) * (numItems - index) * 0.5 * multiple,
+          0,
+        ],
       });
     const rotate =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [`${15 * (numItems - index)}deg`, '0deg'],
+        outputRange: [`${15 * (numItems - index) * multiple}deg`, '0deg'],
       });
     const oppositeRotate =
       fanAnimation &&
       fanAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: [`${-15 * (numItems - index)}deg`, '0deg'],
+        outputRange: [`${-15 * (numItems - index) * multiple}deg`, '0deg'],
       });
     const scale =
       fanAnimation &&
@@ -75,8 +81,8 @@ class FloatingItem extends React.PureComponent {
     const opacity =
       fanAnimation &&
       fanAnimation.interpolate({
-        inputRange: [0.0, 1.0],
-        outputRange: [0.0, 1.0],
+        inputRange: [0.0, 0.25, 1.0],
+        outputRange: [0.0, 0.0, 1.0],
         extrapolate: 'clamp',
       });
     const fastOpacity =
@@ -130,6 +136,8 @@ class FloatingItem extends React.PureComponent {
             {
               opacity: fastOpacity,
               transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],
+              left: hPos.toLowerCase() === 'right' ? -171 : 72,
+              textAlign: hPos.toLowerCase() === 'right' ? 'right' : 'left',
             },
             isDisabled && globalStyles.disabled,
           ]}
