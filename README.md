@@ -1,5 +1,7 @@
 # react-native-floating-action-menu
 
+![Floating Action Menu demo](example/src/assets/readme-0.gif)
+
 100% javascript component for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!
 
 ## Installation
@@ -148,6 +150,8 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 ```
 
 ## Full Example
+
+![Example project demo](example/src/assets/readme-1.gif)
 
  - git clone https://github.com/nicotroia/react-native-floating-action-menu
  - cd react-native-floating-action-menu/example
