@@ -13,6 +13,7 @@ class FloatingMenu extends React.PureComponent {
     dimmerActive: false,
     menuButtonDown: false,
     itemsDown: {},
+    items: [],
   };
 
   menuPressAnimation = new Animated.Value(0);
@@ -20,12 +21,22 @@ class FloatingMenu extends React.PureComponent {
   itemFanAnimations = {};
   dimmerTimeout = null;
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { items } = nextProps;
+
+    return {
+      ...prevState,
+      items: [...items].reverse(),
+    };
+  }
+
   componentDidMount() {
     this.initAnimations();
   }
 
   componentDidUpdate(prevProps) {
-    const { items, isOpen } = this.props;
+    const { isOpen } = this.props;
+    const { items } = this.state;
 
     if (prevProps.items.length !== items.length) {
       this.initAnimations();
@@ -41,7 +52,7 @@ class FloatingMenu extends React.PureComponent {
   }
 
   initAnimations = () => {
-    const { items } = this.props;
+    const { items } = this.state;
 
     if (!this.menuPressAnimation)
       this.menuPressAnimation = new Animated.Value(0);
@@ -90,7 +101,8 @@ class FloatingMenu extends React.PureComponent {
   };
 
   handleItemPress = index => () => {
-    const { items, onItemPress } = this.props;
+    const { onItemPress } = this.props;
+    const { items } = this.state;
     const item = items[index];
 
     if (!item) return;
@@ -109,7 +121,7 @@ class FloatingMenu extends React.PureComponent {
   };
 
   toggleMenu = isOpen => {
-    const { items } = this.props;
+    const { items } = this.state;
 
     const options = {
       toValue: isOpen ? 1.0 : 0.0,
@@ -125,13 +137,13 @@ class FloatingMenu extends React.PureComponent {
       // easeInCubic: t => t*t*t
       // easeInQuart: t => t*t*t*t,
       // easeInOutQubic: t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
-      const t = i / items.length;
+      const t = (isOpen ? i : items.length - i - 1) / items.length;
       const ease = isOpen
         ? t < 0.5
           ? 4 * t * t * t
           : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
         : t * t * t * t;
-      const time = items.length > 5 ? 240 : 180;
+      const time = items.length > 6 ? 280 : items.length > 4 ? 240 : 190;
       const delay = time * ease;
 
       totalDelay = delay + time;
@@ -154,7 +166,6 @@ class FloatingMenu extends React.PureComponent {
 
   renderItems = () => {
     const {
-      items,
       isOpen,
       position,
       renderItemIcon,
@@ -162,7 +173,7 @@ class FloatingMenu extends React.PureComponent {
       innerWidth,
       primaryColor,
     } = this.props;
-    const { itemsDown, dimmerActive } = this.state;
+    const { items, itemsDown, dimmerActive } = this.state;
 
     if (!dimmerActive) return null;
 
@@ -260,8 +271,8 @@ class FloatingMenu extends React.PureComponent {
   };
 
   renderDimmer = () => {
-    const { isOpen, items, dimmerStyle } = this.props;
-    const { dimmerActive } = this.state;
+    const { isOpen, dimmerStyle } = this.props;
+    const { items, dimmerActive } = this.state;
 
     const fanAnimation = this.itemFanAnimations[0];
     const opacity =

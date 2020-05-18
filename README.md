@@ -51,7 +51,7 @@ Example:
 
 Prop | description | type | default 
 --- | --- | --- | ---
-items | array of `Item`s. (See above) | FloatingItem[] | []
+items | array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button. | FloatingItem[] | []
 isOpen | control the menu open/closed state | boolean | false
 position | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | string | 'bottom-right'
 primaryColor | hex color string | string | '#213A77'

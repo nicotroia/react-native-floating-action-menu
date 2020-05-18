@@ -42,28 +42,8 @@ import styles from './App.styles';
 const colorOptions = ['#F53B57', '#3D40C6', '#10BCF9', '#00D8D6', '#04C56B'];
 const items = [
   {
-    label: 'Do it faster',
-    image: require('./assets/icon-1.png'),
-  },
-  {
-    label: 'Make it better',
-    icon: faAmbulance,
-  },
-  {
-    label: 'Work it harder',
-    image: require('./assets/icon-0.png'),
-  },
-  {
-    label: 'Get down tonight',
-    icon: faArrowDown,
-  },
-  {
-    label: 'Make a lil love',
-    icon: faBabyCarriage,
-  },
-  {
-    label: 'Do a little dance',
-    image: require('./assets/icon-2.png'),
+    label: 'Add new User',
+    icon: faUserPlus,
   },
   {
     label: 'Export CSV',
@@ -71,8 +51,28 @@ const items = [
     style: {marginLeft: 5},
   },
   {
-    label: 'Add new User',
-    icon: faUserPlus,
+    label: 'Do a little dance',
+    image: require('./assets/icon-2.png'),
+  },
+  {
+    label: 'Make a lil love',
+    icon: faBabyCarriage,
+  },
+  {
+    label: 'Get down tonight',
+    icon: faArrowDown,
+  },
+  {
+    label: 'Work it harder',
+    image: require('./assets/icon-0.png'),
+  },
+  {
+    label: 'Make it better',
+    icon: faAmbulance,
+  },
+  {
+    label: 'Do it faster',
+    image: require('./assets/icon-1.png'),
   },
 ];
 
@@ -290,7 +290,7 @@ class App extends React.PureComponent {
       itemsPending,
     } = this.state;
 
-    let itemsToShow = numItemsToShow > 0 ? items.slice(-numItemsToShow) : [];
+    let itemsToShow = numItemsToShow > 0 ? items.slice(0, numItemsToShow) : [];
     for (let i = 0; i < itemsToShow.length; i++) {
       const item = itemsToShow[i];
 
