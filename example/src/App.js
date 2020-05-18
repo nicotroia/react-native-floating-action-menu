@@ -135,9 +135,9 @@ class App extends React.PureComponent {
     );
   };
 
-  renderItemIcon = itemState => {
+  renderItemIcon = (item, index, menuState) => {
     const {activeColor} = this.state;
-    const {item, index, itemsDown, dimmerActive} = itemState;
+    const {itemsDown, dimmerActive} = menuState;
 
     if (!item.icon && !item.image) {
       return <Text style={globalStyles.text}>?</Text>;
