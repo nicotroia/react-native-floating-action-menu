@@ -27,11 +27,11 @@ npm install --save react-native-floating-action-menu
 
 *FloatingItem*
 
-Prop | description | required
---- | --- | ---
-label | string | ✔︎
-isPending | boolean | 
-isDisabled | boolean | 
+Prop | description | type | required
+--- | --- | --- | ---
+label | text to display alongside button | string | ✔︎
+isPending | will display ActivityIndicator in place of icon when `isPending` is true | boolean | 
+isDisabled | will disable the item when `isDisabled` is true | boolean | 
 
 Example:
 
