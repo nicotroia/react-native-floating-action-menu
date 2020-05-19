@@ -61,8 +61,10 @@ position | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | string
 primaryColor | hex color string | string | '#213A77'
 buttonWidth | width (and also height) of the button | number | 50
 dimmerStyle | style the background dimmer element | object | -
-renderMenuIcon | a function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
-renderItemIcon | a function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
+openEase | function used to ease the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | t => (--t)*t*t+1
+closeEase | function used to ease the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | t => t*t*t
+renderMenuIcon | function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
+renderItemIcon | function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
 onMenuToggle | callback function called when the menu has been toggled open or closed | function | -
 onItemPress | callback function called when a menu item has been pressed. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored. | function | -
 

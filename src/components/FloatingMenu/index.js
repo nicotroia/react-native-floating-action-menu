@@ -121,6 +121,7 @@ class FloatingMenu extends React.PureComponent {
   };
 
   toggleMenu = isOpen => {
+    const { openEase, closeEase } = this.props;
     const { items } = this.state;
 
     const options = {
@@ -135,8 +136,7 @@ class FloatingMenu extends React.PureComponent {
     let totalDelay = 0;
     for (let i = 0; i < items.length; i++) {
       const t = (isOpen ? i : items.length - i - 1) / items.length;
-      // easeOutCubic on open, easeInCubic on close
-      const ease = isOpen ? --t * t * t + 1 : t * t * t;
+      const ease = isOpen ? openEase(t) : closeEase(t);
       const time = (150 / Math.min(Math.max(items.length, 0), 8)) * i + 160;
       const delay = Math.max(Math.min(time * ease, 300), 0);
 
@@ -324,6 +324,8 @@ FloatingMenu.defaultProps = {
   buttonWidth: Design.buttonWidth,
   innerWidth: Design.buttonWidth - 12,
   position: MenuPositions.bottomRight,
+  openEase: t => --t * t * t + 1,
+  closeEase: t => t * t * t,
 };
 
 export default FloatingMenu;
