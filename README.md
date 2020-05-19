@@ -57,12 +57,12 @@ Prop | description | type | default
 --- | --- | --- | ---
 items | array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button. | FloatingItem[] | []
 isOpen | control the menu open/closed state | boolean | false
-position | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | string | 'bottom-right'
-primaryColor | hex color string | string | '#213A77'
+position | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right" | string | "bottom-right"
+primaryColor | hex color string | string | "#213A77"
 buttonWidth | width (and also height) of the button | number | 50
 dimmerStyle | style the background dimmer element | object | -
-openEase | function used to ease the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | t => (--t)*t*t+1
-closeEase | function used to ease the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | t => t*t*t
+openEase | function used to ease the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>`t => (--t) * t * t + 1`</pre>
+closeEase | function used to ease the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>t => t * t * t</pre>
 renderMenuIcon | function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
 renderItemIcon | function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
 onMenuToggle | callback function called when the menu has been toggled open or closed | function | -
