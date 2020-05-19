@@ -109,6 +109,7 @@ class Example extends React.Component {
 
   handleMenuToggle = val =>
     this.setState({isMenuOpen: !this.state.isMenuOpen});
+
   handleItemPress = (item, index) =>
     console.log('pressed item', item);
 
