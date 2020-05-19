@@ -147,6 +147,7 @@ export default Example;
 ## Example rendering icons (FontAwesome, regular Images)
 
 ```JSX
+import { Image } from 'react-native';
 import { FloatingMenu } from 'react-native-floating-action-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBars, faTimes, faUserPlus } from '@fortawesome/free-solid-svg-icons';
@@ -155,7 +156,7 @@ import { faBars, faTimes, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 const items = [
   {
     label: 'First is an icon',
-    icon: faUserPlus
+    fa: faUserPlus
   },
   {
     label: 'Second is an image',
@@ -167,15 +168,18 @@ const renderItemIcon = (item, index, menuState) => {
   const { primaryColor } = this.state;
   const { itemsDown, dimmerActive } = menuState;
 
+  const isItemPressed = itemsDown[index];
+  const color = isItemPressed ? '#fff' : primaryColor;
+
   // Icons can be rendered however you like.
   // Here are some examples, using data from the item object:
 
-  if (item.icon) {
+  if (item.fa) {
     return (
       <FontAwesomeIcon
-        icon={item.icon}
+        icon={item.fa}
         size={25}
-        color={itemsDown[index] ? '#fff' : primaryColor}
+        color={color}
       />
     );
   }
@@ -183,10 +187,7 @@ const renderItemIcon = (item, index, menuState) => {
     return (
       <Image
         source={item.image}
-        style={[
-          styles.addIcon,
-          {tintColor: itemsDown[index] ? '#fff' : primaryColor},
-        ]}
+        style={{ tintColor: color }}
         resizeMode="contain"
       />
     );
