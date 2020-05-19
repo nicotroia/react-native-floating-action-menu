@@ -23,7 +23,7 @@ import { FloatingMenu } from 'react-native-floating-action-menu';
 <FloatingMenu
   items={items}
   isOpen={this.state.isMenuOpen}
-  onMenuToggle={this.handleMenuPress}
+  onMenuToggle={this.handleMenuToggle}
   onItemPress={this.handleItemPress}
 />
 ```
@@ -38,6 +38,7 @@ label | text to display alongside button | string | ✔︎
 labelStyle | style for the Text element | object | 
 isPending | will display ActivityIndicator in place of icon when `isPending` is true | boolean | 
 isDisabled | will disable the item when `isDisabled` is true | boolean | 
+onPress | callback function called when this item is pressed. This will override the default `onItemPress` callback given to FloatingMenu | function |
 
 Example:
 
@@ -106,7 +107,7 @@ class Example extends React.Component {
     isMenuOpen: false,
   };
 
-  handleMenuPress = val =>
+  handleMenuToggle = val =>
     this.setState({isMenuOpen: !this.state.isMenuOpen});
   handleItemPress = (item, index) =>
     console.log('pressed item', item);
@@ -123,7 +124,7 @@ class Example extends React.Component {
         <FloatingMenu
           isOpen={this.state.isMenuOpen}
           items={items}
-          onMenuToggle={this.handleMenuPress}
+          onMenuToggle={this.handleMenuToggle}
           onItemPress={this.handleItemPress}
         />
       </View>
