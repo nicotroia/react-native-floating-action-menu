@@ -86,6 +86,25 @@ class App extends React.PureComponent {
     itemsPending: {},
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { numItemsToShow, itemsPending } = prevState;
+
+    let itemsToShow = numItemsToShow > 0 ? items.slice(0, numItemsToShow) : [];
+    for (let i = 0; i < itemsToShow.length; i++) {
+      const item = itemsToShow[i];
+
+      itemsToShow[i] = {
+        ...item,
+        isPending: itemsPending[itemsToShow.length - i - 1],
+      };
+    }
+
+    return {
+      ...prevState,
+      itemsToShow,
+    }
+  }
+
   handleMenuToggle = val => {
     this.setState({isMenuOpen: !this.state.isMenuOpen});
   };
@@ -284,21 +303,10 @@ class App extends React.PureComponent {
     const {
       noIcons,
       isMenuOpen,
-      numItemsToShow,
       activePosition,
       activeColor,
-      itemsPending,
+      itemsToShow,
     } = this.state;
-
-    let itemsToShow = numItemsToShow > 0 ? items.slice(0, numItemsToShow) : [];
-    for (let i = 0; i < itemsToShow.length; i++) {
-      const item = itemsToShow[i];
-
-      itemsToShow[i] = {
-        ...item,
-        isPending: itemsPending[i],
-      };
-    }
 
     return (
       <SafeAreaView>

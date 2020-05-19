@@ -35,6 +35,7 @@ class FloatingItem extends React.PureComponent {
       // icon,
       // iconSize,
       // iconStyle,
+      labelStyle,
       isPending,
       isDisabled,
     } = item;
@@ -133,6 +134,7 @@ class FloatingItem extends React.PureComponent {
           style={[
             globalStyles.text,
             styles.itemLabel,
+            labelStyle,
             {
               opacity: fastOpacity,
               transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],

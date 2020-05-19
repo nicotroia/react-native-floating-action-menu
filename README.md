@@ -2,7 +2,7 @@
 <div align="center">
   <h1>react-native-floating-action-menu</h1>
   
-  <div>100% javascript component for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!</div>
+  <div>B-Y-O-I (bring your own icon) javascript component for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!</div>
   
   <br/>
 
@@ -35,6 +35,7 @@ import { FloatingMenu } from 'react-native-floating-action-menu';
 Prop | description | type | required
 --- | --- | --- | ---
 label | text to display alongside button | string | ✔︎
+labelStyle | style for the Text element | object | 
 isPending | will display ActivityIndicator in place of icon when `isPending` is true | boolean | 
 isDisabled | will disable the item when `isDisabled` is true | boolean | 
 
@@ -45,6 +46,7 @@ Example:
   label: 'Hello world',
   isPending: false,
   isDisabled: false,
+  onPress: (item, index) => {}, // (optional, can also be handled via `onItemPress`)
   // Anything else you want goes here
 }
 ```
@@ -61,8 +63,8 @@ buttonWidth | width (and also height) of the button | number | 50
 dimmerStyle | style the background dimmer element | object | -
 renderMenuIcon | a function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
 renderItemIcon | a function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
-onMenuToggle | function called when the menu has been toggled open or closed | function | -
-onItemPress | function called when a menu item has been pressed | function | -
+onMenuToggle | callback function called when the menu has been toggled open or closed | function | -
+onItemPress | callback function called when a menu item has been pressed. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored. | function | -
 
 ## Gif Demos
 
@@ -139,46 +141,54 @@ export default Example;
 
 ```
 
-## Example rendering FontAwesome icons
+## Example rendering icons (FontAwesome, regular Images)
 
 ```
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTimes, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+
+const items = [
+  { label: 'First is an icon', icon: faUserPlus }, // FontAwesome Icon
+  { label: 'Second is an image', image: require('../assets/img-0.png') }, // Image
+];
 
 ...
 
 <FloatingMenu
   
   ...
-  
-  renderMenuIcon={menuState => {
-    const { itemsDown, menuButtonDown, dimmerActive } = menuState;
-    const { size, color } = item; // Assuming you append `size` and `color` to the item data.
-    
-    return (
-      <FontAwesomeIcon
-        icon={dimmerActive ? faTimes : faBars}
-        size={size}
-        color={color}
-      />
-    );
-  }}
-  
-  ...
-  
-  renderItemIcon={(item, index, menuState) => {
-    const { itemsDown, menuButtonDown, dimmerActive } = menuState;
-    const { icon, size, color } = item; // Assuming you append `icon`, `size`, and `color`.
 
-    return (
-      <FontAwesomeIcon
-        icon={icon}
-        size={size}
-        color={color}
-      />
-    );
+  renderItemIcon={(item, index, menuState) => {
+    const { primaryColor } = this.state;
+    const { itemsDown, dimmerActive } = menuState;
+
+    // Icons can be rendered however you like.
+    // Here are some examples, using data from the item object:
+
+    if (item.icon) {
+      return (
+        <FontAwesomeIcon
+          icon={item.icon}
+          size={25}
+          color={itemsDown[index] ? '#fff' : primaryColor}
+        />
+      );
+    }
+    else if (item.image) {
+      return (
+        <Image
+          source={item.image}
+          style={[
+            styles.addIcon,
+            {tintColor: itemsDown[index] ? '#fff' : primaryColor},
+          ]}
+          resizeMode="contain"
+        />
+      );
+    }
   }}
 />
+
 ```
 
 ## Full Example

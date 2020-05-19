@@ -134,19 +134,14 @@ class FloatingMenu extends React.PureComponent {
     // Fan items
     let totalDelay = 0;
     for (let i = 0; i < items.length; i++) {
-      // easeInCubic: t => t*t*t
-      // easeInQuart: t => t*t*t*t,
-      // easeInOutQubic: t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
       const t = (isOpen ? i : items.length - i - 1) / items.length;
-      const ease = isOpen
-        ? t < 0.5
-          ? 4 * t * t * t
-          : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-        : t * t * t * t;
-      const time = items.length > 6 ? 280 : items.length > 4 ? 240 : 190;
-      const delay = time * ease;
+      // easeOutCubic on open, easeInCubic on close
+      const ease = isOpen ? --t * t * t + 1 : t * t * t;
+      const time = (150 / Math.min(Math.max(items.length, 0), 8)) * i + 160;
+      const delay = Math.max(Math.min(time * ease, 300), 0);
 
       totalDelay = delay + time;
+
       Animated.delay(delay).start(() => {
         Animated.spring(this.itemFanAnimations[i], options).start();
       });
