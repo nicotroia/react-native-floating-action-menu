@@ -17,7 +17,7 @@ npm install --save react-native-floating-action-menu
 
 ## Usage
 
-```js
+```JSX
 import { FloatingMenu } from 'react-native-floating-action-menu';
 
 <FloatingMenu
@@ -42,7 +42,7 @@ onPress | callback function called when this item is pressed. This will override
 
 Example:
 
-```js
+```JSX
 {
   label: 'Hello world',
   isPending: false,
@@ -97,7 +97,7 @@ onItemPress | callback function called when a menu item has been pressed. If an 
 
 ## Quick Start Example
 
-```js
+```JSX
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FloatingMenu } from 'react-native-floating-action-menu';
@@ -146,51 +146,54 @@ export default Example;
 
 ## Example rendering icons (FontAwesome, regular Images)
 
-```
+```JSX
+import { FloatingMenu } from 'react-native-floating-action-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBars, faTimes, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
+// Specify data required to render the icon
 const items = [
-  { label: 'First is an icon', icon: faUserPlus }, // FontAwesome Icon
-  { label: 'Second is an image', image: require('../assets/img-0.png') }, // Image
+  {
+    label: 'First is an icon',
+    icon: faUserPlus
+  },
+  {
+    label: 'Second is an image',
+    image: require('../assets/img-0.png')
+  },
 ];
 
-...
+const renderItemIcon = (item, index, menuState) => {
+  const { primaryColor } = this.state;
+  const { itemsDown, dimmerActive } = menuState;
 
-<FloatingMenu
-  
-  ...
+  // Icons can be rendered however you like.
+  // Here are some examples, using data from the item object:
 
-  renderItemIcon={(item, index, menuState) => {
-    const { primaryColor } = this.state;
-    const { itemsDown, dimmerActive } = menuState;
+  if (item.icon) {
+    return (
+      <FontAwesomeIcon
+        icon={item.icon}
+        size={25}
+        color={itemsDown[index] ? '#fff' : primaryColor}
+      />
+    );
+  }
+  else if (item.image) {
+    return (
+      <Image
+        source={item.image}
+        style={[
+          styles.addIcon,
+          {tintColor: itemsDown[index] ? '#fff' : primaryColor},
+        ]}
+        resizeMode="contain"
+      />
+    );
+  }
 
-    // Icons can be rendered however you like.
-    // Here are some examples, using data from the item object:
-
-    if (item.icon) {
-      return (
-        <FontAwesomeIcon
-          icon={item.icon}
-          size={25}
-          color={itemsDown[index] ? '#fff' : primaryColor}
-        />
-      );
-    }
-    else if (item.image) {
-      return (
-        <Image
-          source={item.image}
-          style={[
-            styles.addIcon,
-            {tintColor: itemsDown[index] ? '#fff' : primaryColor},
-          ]}
-          resizeMode="contain"
-        />
-      );
-    }
-  }}
-/>
+  return null;
+};
 
 ```
 
