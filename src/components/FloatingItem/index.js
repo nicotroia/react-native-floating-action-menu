@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  View,
   Text,
   TouchableWithoutFeedback,
   Animated,
@@ -113,6 +114,7 @@ class FloatingItem extends React.PureComponent {
           style={styles.activityIndicator}
         />
       );
+    const borderColor = isDisabled ? `${primaryColor}80` : primaryColor;
 
     return (
       <Animated.View
@@ -125,46 +127,46 @@ class FloatingItem extends React.PureComponent {
             transform: fanAnimation
               ? [{ translateX: 0 }, { translateY }, { rotate }, { scale }]
               : [],
-            borderColor: primaryColor,
+            borderColor,
           },
-          isDisabled && globalStyles.disabled,
         ]}
       >
-        <Animated.Text
-          style={[
-            globalStyles.text,
-            styles.itemLabel,
-            labelStyle,
-            {
-              opacity: fastOpacity,
-              transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],
-              left: hPos.toLowerCase() === 'right' ? -171 : 72,
-              textAlign: hPos.toLowerCase() === 'right' ? 'right' : 'left',
-            },
-            isDisabled && globalStyles.disabled,
-          ]}
-        >
-          {label}
-        </Animated.Text>
-
-        <TouchableWithoutFeedback
-          style={globalStyles.button}
-          disabled={isDisabled || isPending || !isOpen}
-          hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
-          onPressIn={onPressIn}
-          onPressOut={onPressOut}
-          onPress={onPress}
-        >
-          <Animated.View
+        <View style={isDisabled && globalStyles.disabled}>
+          <Animated.Text
             style={[
-              globalStyles.buttonInner,
-              applyButtonWidth(innerWidth),
-              { backgroundColor },
+              globalStyles.text,
+              styles.itemLabel,
+              labelStyle,
+              {
+                opacity: fastOpacity,
+                transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],
+                left: hPos.toLowerCase() === 'right' ? -171 : 72,
+                textAlign: hPos.toLowerCase() === 'right' ? 'right' : 'left',
+              },
             ]}
           >
-            {content}
-          </Animated.View>
-        </TouchableWithoutFeedback>
+            {label}
+          </Animated.Text>
+
+          <TouchableWithoutFeedback
+            style={globalStyles.button}
+            disabled={isDisabled || isPending || !isOpen}
+            hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
+            onPress={onPress}
+          >
+            <Animated.View
+              style={[
+                globalStyles.buttonInner,
+                applyButtonWidth(innerWidth),
+                { backgroundColor },
+              ]}
+            >
+              {content}
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </View>
       </Animated.View>
     );
   }

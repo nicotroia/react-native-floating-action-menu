@@ -199,12 +199,19 @@ const renderItemIcon = (item, index, menuState) => {
 
 ```
 
-## Full Example
+## Run Example
 
- - git clone https://github.com/nicotroia/react-native-floating-action-menu
- - cd react-native-floating-action-menu/example
- - npm install
- - npm run ios # or android
+- git clone https://github.com/nicotroia/react-native-floating-action-menu
+- cd react-native-floating-action-menu/example
+- npm install
+- npm run ios # or android
+
+## Develop
+
+- `npm pack`
+- `cd example`
+- `npm install ../react-native-floating-action-menu.tgz --save`
+- `npm run ios` # or android
 
 ## License
 

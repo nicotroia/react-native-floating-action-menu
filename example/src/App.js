@@ -49,6 +49,7 @@ const items = [
     label: 'Export CSV',
     icon: faFileExport,
     style: {marginLeft: 5},
+    isDisabled: true,
   },
   {
     label: 'Do a little dance',
@@ -87,7 +88,7 @@ class App extends React.PureComponent {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { numItemsToShow, itemsPending } = prevState;
+    const {numItemsToShow, itemsPending} = prevState;
 
     let itemsToShow = numItemsToShow > 0 ? items.slice(0, numItemsToShow) : [];
     for (let i = 0; i < itemsToShow.length; i++) {
@@ -102,7 +103,7 @@ class App extends React.PureComponent {
     return {
       ...prevState,
       itemsToShow,
-    }
+    };
   }
 
   handleMenuToggle = val => {
