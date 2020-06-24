@@ -102,7 +102,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FloatingMenu } from 'react-native-floating-action-menu';
 
-class Example extends React.Component {
+class MyScreen extends React.Component {
   state = {
     isMenuOpen: false,
   };
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Example;
+export default MyScreen;
 
 ```
 
@@ -164,38 +164,43 @@ const items = [
     image: require('../assets/img-0.png')
   },
 ];
+const primaryColor = '#09f';
 
-const renderItemIcon = (item, index, menuState) => {
-  const { primaryColor } = this.state;
-  const { itemsDown, dimmerActive } = menuState;
+class MyScreen extends React.Component {
+  state = {};
+  
+  renderItemIcon = (item, index, menuState) => {
+    const { itemsDown, dimmerActive } = menuState;
 
-  const isItemPressed = itemsDown[index];
-  const color = isItemPressed ? '#fff' : primaryColor;
+    const isItemPressed = itemsDown[index];
+    const color = isItemPressed ? '#fff' : primaryColor;
 
-  // Icons can be rendered however you like.
-  // Here are some examples, using data from the item object:
+    // Icons can be rendered however you like.
+    // Here are some examples, using data from the item object:
 
-  if (item.fa) {
-    return (
-      <FontAwesomeIcon
-        icon={item.fa}
-        size={25}
-        color={color}
-      />
-    );
-  }
-  else if (item.image) {
-    return (
-      <Image
-        source={item.image}
-        style={{ tintColor: color }}
-        resizeMode="contain"
-      />
-    );
-  }
+    if (item.fa) {
+      return (
+        <FontAwesomeIcon
+          icon={item.fa}
+          size={25}
+          color={color}
+        />
+      );
+    }
+    else if (item.image) {
+      return (
+        <Image
+          source={item.image}
+          style={{ tintColor: color }}
+          resizeMode="contain"
+        />
+      );
+    }
 
-  return null;
-};
+    return null;
+  };
+
+  ...
 
 ```
 
