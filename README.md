@@ -20,6 +20,12 @@ npm install --save react-native-floating-action-menu
 ```JSX
 import { FloatingMenu } from 'react-native-floating-action-menu';
 
+const items = [
+  { label: 'Do a little dance' },
+  { label: 'Make a lil love' },
+  { label: 'Get down tonight' },
+];
+
 <FloatingMenu
   items={items}
   isOpen={this.state.isMenuOpen}
@@ -102,6 +108,12 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FloatingMenu } from 'react-native-floating-action-menu';
 
+const items = [
+  { label: 'Do a little dance' },
+  { label: 'Make a lil love' },
+  { label: 'Get down tonight' },
+];
+
 class MyScreen extends React.Component {
   state = {
     isMenuOpen: false,
@@ -114,12 +126,6 @@ class MyScreen extends React.Component {
     console.log('pressed item', item);
 
   render() {
-    const items = [
-      { label: 'Do a little dance' },
-      { label: 'Make a lil love' },
-      { label: 'Get down tonight' },
-    ];
-
     return (
       <View style={styles.container}>
         <FloatingMenu
@@ -164,6 +170,7 @@ const items = [
     image: require('../assets/img-0.png')
   },
 ];
+// Optional color to be silly
 const primaryColor = '#09f';
 
 class MyScreen extends React.Component {
