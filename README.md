@@ -72,8 +72,8 @@ openEase | function used to ease the opening animation (see [js easing functions
 closeEase | function used to ease the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>t => t * t * t</pre>
 renderMenuIcon | function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
 renderItemIcon | function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
-onMenuToggle | callback function called when the menu has been toggled open or closed | function | -
-onItemPress | callback function called when a menu item has been pressed. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored. | function | -
+onMenuToggle | callback function called when the menu has been toggled open or closed. Receives a boolean value | function | -
+onItemPress | callback function called when a menu item has been pressed. Receives item and index. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored | function | -
 
 ## Gif Demos
 
@@ -119,8 +119,8 @@ class MyScreen extends React.Component {
     isMenuOpen: false,
   };
 
-  handleMenuToggle = val =>
-    this.setState({isMenuOpen: !this.state.isMenuOpen});
+  handleMenuToggle = isMenuOpen =>
+    this.setState({ isMenuOpen });
 
   handleItemPress = (item, index) =>
     console.log('pressed item', item);
@@ -175,6 +175,14 @@ const primaryColor = '#09f';
 
 class MyScreen extends React.Component {
   state = {};
+
+  renderMenuIcon = (menuState) => {
+    const { menuButtonDown } = menuState;
+
+    return menuButtonDown
+      ? <Image source={require('./btn-down.png')} />
+      : <Image source={require('./btn-up.png')} />;
+  }
   
   renderItemIcon = (item, index, menuState) => {
     const { itemsDown, dimmerActive } = menuState;
