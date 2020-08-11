@@ -166,6 +166,9 @@ class FloatingMenu extends React.PureComponent {
       renderItemIcon,
       buttonWidth,
       innerWidth,
+      backgroundColor,
+      borderColor,
+      iconColor,
       primaryColor,
     } = this.props;
     const { items, itemsDown, dimmerActive } = this.state;
@@ -186,6 +189,9 @@ class FloatingMenu extends React.PureComponent {
           }
           position={position}
           isOpen={isOpen || dimmerActive}
+          backgroundColor={backgroundColor}
+          borderColor={borderColor}
+          iconColor={iconColor}
           primaryColor={primaryColor}
           buttonWidth={buttonWidth}
           innerWidth={innerWidth}
@@ -211,15 +217,21 @@ class FloatingMenu extends React.PureComponent {
     const {
       renderMenuIcon,
       isOpen,
+      backgroundColor: _backgroundColor,
+      borderColor: _borderColor,
+      iconColor: _iconColor,
       primaryColor,
       buttonWidth,
       innerWidth,
     } = this.props;
     const { menuButtonDown } = this.state;
 
+    const bgColor = _backgroundColor || primaryColor;
+    const iconColor = _iconColor || primaryColor;
+    const borderColor = _borderColor || primaryColor;
     const backgroundColor = this.menuPressAnimation.interpolate({
       inputRange: [0.0, 1.0],
-      outputRange: ['#ffffff', primaryColor],
+      outputRange: ['#ffffff', bgColor],
     });
 
     const content = renderMenuIcon ? (
@@ -229,7 +241,7 @@ class FloatingMenu extends React.PureComponent {
         style={[
           globalStyles.missingIcon,
           isOpen ? styles.closeIcon : styles.menuIcon,
-          { color: menuButtonDown ? '#fff' : primaryColor },
+          { color: menuButtonDown ? '#fff' : iconColor },
         ]}
       >
         {isOpen ? '×' : '☰'}
@@ -241,7 +253,7 @@ class FloatingMenu extends React.PureComponent {
         style={[
           globalStyles.buttonOuter,
           applyButtonWidth(buttonWidth),
-          { borderColor: primaryColor },
+          { borderColor },
         ]}
       >
         <TouchableWithoutFeedback

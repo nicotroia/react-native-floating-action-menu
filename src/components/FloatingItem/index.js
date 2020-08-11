@@ -27,19 +27,14 @@ class FloatingItem extends React.PureComponent {
       primaryColor,
       itemFanAnimations,
       itemPressAnimations,
+      backgroundColor: _backgroundColor,
+      borderColor: _borderColor,
+      iconColor: _iconColor,
       onPressIn,
       onPressOut,
       onPress,
     } = this.props;
-    const {
-      label,
-      // icon,
-      // iconSize,
-      // iconStyle,
-      labelStyle,
-      isPending,
-      isDisabled,
-    } = item;
+    const { label, labelStyle, isPending, isDisabled } = item;
 
     const pressAnimation = itemPressAnimations[index];
     const fanAnimation = itemFanAnimations[index];
@@ -51,7 +46,7 @@ class FloatingItem extends React.PureComponent {
       pressAnimation &&
       pressAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: ['#ffffff', primaryColor],
+        outputRange: ['#ffffff', _backgroundColor || primaryColor],
       });
     const translateY =
       fanAnimation &&
@@ -99,7 +94,7 @@ class FloatingItem extends React.PureComponent {
       <Text
         style={[
           globalStyles.missingIcon,
-          { color: itemDown ? '#fff' : primaryColor },
+          { color: itemDown ? '#fff' : _iconColor || primaryColor },
         ]}
       >
         {index}
@@ -110,11 +105,13 @@ class FloatingItem extends React.PureComponent {
       content = (
         <ActivityIndicator
           size="small"
-          color={primaryColor}
+          color={_iconColor || primaryColor}
           style={styles.activityIndicator}
         />
       );
-    const borderColor = isDisabled ? `${primaryColor}80` : primaryColor;
+    const borderColor = isDisabled
+      ? `${_borderColor || primaryColor}80`
+      : _borderColor || primaryColor;
 
     return (
       <Animated.View
