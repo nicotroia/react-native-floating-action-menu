@@ -40,11 +40,11 @@ const items = [
 
 Prop | description | type | required
 --- | --- | --- | ---
-label | text to display alongside button | string | ✔︎
-labelStyle | style for the Text element | object | 
-isPending | will display ActivityIndicator in place of icon when `isPending` is true | boolean | 
-isDisabled | will disable the item when `isDisabled` is true | boolean | 
-onPress | callback function called when this item is pressed. This will override the default `onItemPress` callback given to FloatingMenu | function |
+label | Text to display alongside button | string | ✔︎
+labelStyle | Style for the Text element | object | 
+isPending | Will display ActivityIndicator in place of icon when `isPending` is true | boolean | 
+isDisabled | Will disable the item when `isDisabled` is true | boolean | 
+onPress | Callback function called when this item is pressed. This will override the default `onItemPress` callback given to FloatingMenu | function |
 
 Example:
 
@@ -67,16 +67,16 @@ isOpen | Control the menu open/closed state | boolean | false
 position | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right" | string | "bottom-right"
 primaryColor | Hex color string used for backgrounds, borders, and icons | string | "#213A77"
 backgroundColor | Override background color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
-borderColor | override border color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
-iconColor | override icon color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
-buttonWidth | width (and also height) of the button | number | 50
-dimmerStyle | style the background dimmer element | object | -
-openEase | function used to ease the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>`t => (--t) * t * t + 1`</pre>
-closeEase | function used to ease the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>t => t * t * t</pre>
-renderMenuIcon | function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
-renderItemIcon | function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
-onMenuToggle | callback function called when the menu has been toggled open or closed. Receives a boolean value | function | -
-onItemPress | callback function called when a menu item has been pressed. Receives item and index. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored | function | -
+borderColor | Override border color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
+iconColor | Override icon color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
+buttonWidth | Width (and also height) of the button | number | 50
+dimmerStyle | Style the background dimmer element | object | -
+openEase | Easing function used for the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>`t => (--t) * t * t + 1`</pre>
+closeEase | Easing function used for the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>t => t * t * t</pre>
+renderMenuIcon | Function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
+renderItemIcon | Function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
+onMenuToggle | Callback function called when the menu has been toggled open or closed. Receives a boolean value | function | -
+onItemPress | Callback function called when a menu item has been pressed. Receives item and index. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored | function | -
 
 ## Gif Demos
 
