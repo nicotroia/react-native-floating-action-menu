@@ -62,13 +62,13 @@ Example:
 
 Prop | description | type | default 
 --- | --- | --- | ---
-items | array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button. | FloatingItem[] | []
-isOpen | control the menu open/closed state | boolean | false
+items | Array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button. | FloatingItem[] | []
+isOpen | Control the menu open/closed state | boolean | false
 position | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right" | string | "bottom-right"
-primaryColor | hex color string | string | "#213A77"
-backgroundColor | custom background color for menu and items. Will default to `primaryColor` value. | string | -
-borderColor | custom border color for menu and items. Will default to `primaryColor` value. | string | -
-iconColor | custom icon color for menu and items. Will default to `primaryColor` value. | string | -
+primaryColor | Hex color string used for backgrounds, borders, and icons | string | "#213A77"
+backgroundColor | Override background color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
+borderColor | override border color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
+iconColor | override icon color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
 buttonWidth | width (and also height) of the button | number | 50
 dimmerStyle | style the background dimmer element | object | -
 openEase | function used to ease the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>`t => (--t) * t * t + 1`</pre>
