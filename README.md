@@ -65,8 +65,13 @@ Prop | description | type | default
 items | Array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button. | FloatingItem[] | []
 isOpen | Control the menu open/closed state | boolean | false
 position | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right" | string | "bottom-right"
+top | Position in px away from top edge | number | 38
+left | Position in px away from left edge | number | 38
+right | Position in px away from right edge | number | 38
+bottom | Position in px away from bottom edge | number | 38
 primaryColor | Hex color string used for backgrounds, borders, and icons | string | "#213A77"
-backgroundColor | Override background color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
+backgroundUpColor | Override background color for menu and items UP state. Defaults to `#ffffff`. | string (hex) | -
+backgroundDownColor | Override background color for menu and items DOWN state. Defaults to `primaryColor` value. | string (hex) | -
 borderColor | Override border color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
 iconColor | Override icon color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
 buttonWidth | Width (and also height) of the button | number | 50

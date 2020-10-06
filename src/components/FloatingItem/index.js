@@ -27,7 +27,8 @@ class FloatingItem extends React.PureComponent {
       primaryColor,
       itemFanAnimations,
       itemPressAnimations,
-      backgroundColor: _backgroundColor,
+      backgroundUpColor,
+      backgroundDownColor,
       borderColor: _borderColor,
       iconColor: _iconColor,
       onPressIn,
@@ -46,7 +47,10 @@ class FloatingItem extends React.PureComponent {
       pressAnimation &&
       pressAnimation.interpolate({
         inputRange: [0.0, 1.0],
-        outputRange: ['#ffffff', _backgroundColor || primaryColor],
+        outputRange: [
+          backgroundUpColor || '#ffffff',
+          backgroundDownColor || primaryColor,
+        ],
       });
     const translateY =
       fanAnimation &&

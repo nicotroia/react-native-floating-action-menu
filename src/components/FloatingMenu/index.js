@@ -166,7 +166,8 @@ class FloatingMenu extends React.PureComponent {
       renderItemIcon,
       buttonWidth,
       innerWidth,
-      backgroundColor,
+      backgroundUpColor,
+      backgroundDownColor,
       borderColor,
       iconColor,
       primaryColor,
@@ -189,7 +190,8 @@ class FloatingMenu extends React.PureComponent {
           }
           position={position}
           isOpen={isOpen || dimmerActive}
-          backgroundColor={backgroundColor}
+          backgroundUpColor={backgroundUpColor}
+          backgroundDownColor={backgroundDownColor}
           borderColor={borderColor}
           iconColor={iconColor}
           primaryColor={primaryColor}
@@ -217,7 +219,8 @@ class FloatingMenu extends React.PureComponent {
     const {
       renderMenuIcon,
       isOpen,
-      backgroundColor: _backgroundColor,
+      backgroundUpColor,
+      backgroundDownColor,
       borderColor: _borderColor,
       iconColor: _iconColor,
       primaryColor,
@@ -226,12 +229,14 @@ class FloatingMenu extends React.PureComponent {
     } = this.props;
     const { menuButtonDown } = this.state;
 
-    const bgColor = _backgroundColor || primaryColor;
     const iconColor = _iconColor || primaryColor;
     const borderColor = _borderColor || primaryColor;
     const backgroundColor = this.menuPressAnimation.interpolate({
       inputRange: [0.0, 1.0],
-      outputRange: ['#ffffff', bgColor],
+      outputRange: [
+        backgroundUpColor || '#ffffff',
+        backgroundDownColor || bgColor,
+      ],
     });
 
     const content = renderMenuIcon ? (
@@ -303,9 +308,13 @@ class FloatingMenu extends React.PureComponent {
   };
 
   render = () => {
-    const { position } = this.props;
+    const { position, top, left, right, bottom } = this.props;
 
     const [vPos, hPos] = position.split('-');
+    const vVal =
+      vPos === 'top' ? top || 38 : vPos === 'bottom' ? bottom || 38 : 38;
+    const hVal =
+      hPos === 'left' ? left || 38 : hPos === 'right' ? right || 38 : 38;
 
     return (
       <View style={styles.container} pointerEvents="box-none">
@@ -313,8 +322,8 @@ class FloatingMenu extends React.PureComponent {
           style={[
             styles.itemContainer,
             {
-              [vPos]: 38,
-              [hPos]: 38,
+              [vPos]: vVal,
+              [hPos]: hVal,
               flexDirection:
                 vPos.toLowerCase() === 'bottom' ? 'column' : 'column-reverse',
             },
@@ -338,6 +347,10 @@ FloatingMenu.defaultProps = {
   position: MenuPositions.bottomRight,
   openEase: t => --t * t * t + 1,
   closeEase: t => t * t * t,
+  top: 38,
+  left: 38,
+  right: 38,
+  bottom: 38,
 };
 
 export default FloatingMenu;
