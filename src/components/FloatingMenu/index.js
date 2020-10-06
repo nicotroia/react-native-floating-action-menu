@@ -235,7 +235,7 @@ class FloatingMenu extends React.PureComponent {
       inputRange: [0.0, 1.0],
       outputRange: [
         backgroundUpColor || '#ffffff',
-        backgroundDownColor || bgColor,
+        backgroundDownColor || primaryColor,
       ],
     });
 
