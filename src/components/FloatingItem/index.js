@@ -137,13 +137,13 @@ class FloatingItem extends React.PureComponent {
             style={[
               globalStyles.text,
               styles.itemLabel,
-              labelStyle,
               {
                 opacity: fastOpacity,
                 transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],
                 left: hPos.toLowerCase() === 'right' ? -171 : 72,
                 textAlign: hPos.toLowerCase() === 'right' ? 'right' : 'left',
               },
+              labelStyle,
             ]}
           >
             {label}

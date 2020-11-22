@@ -301,7 +301,7 @@ class FloatingMenu extends React.PureComponent {
         onPress={this.handleMenuPress}
       >
         <Animated.View
-          style={[globalStyles.dimmer, styles.dimmer, dimmerStyle, { opacity }]}
+          style={[globalStyles.dimmer, styles.dimmer, { opacity }, dimmerStyle]}
         />
       </TouchableWithoutFeedback>
     ) : null;
