@@ -49,6 +49,7 @@ const items = [
     label: 'Export CSV',
     icon: faFileExport,
     style: {marginLeft: 5},
+    labelStyle: {width: 150},
     isDisabled: true,
   },
   {

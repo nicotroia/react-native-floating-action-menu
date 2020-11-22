@@ -140,7 +140,7 @@ class FloatingItem extends React.PureComponent {
               {
                 opacity: fastOpacity,
                 transform: fanAnimation ? [{ rotate: oppositeRotate }] : [],
-                left: hPos.toLowerCase() === 'right' ? -171 : 72,
+                [hPos.toLowerCase()]: hPos.toLowerCase() === 'right' ? 68 : 72,
                 textAlign: hPos.toLowerCase() === 'right' ? 'right' : 'left',
               },
               labelStyle,
