@@ -39,13 +39,8 @@ const globalStyles = StyleSheet.create({
     right: 0,
   },
   buttonOuter: {
-    // width: Design.buttonWidth,
-    // height: Design.buttonWidth,
-    // borderRadius: Design.buttonWidth * 0.5,
-    // borderColor: Colors.primaryColor,
     backgroundColor: '#fff',
     borderWidth: 3,
-    marginTop: 14,
     elevation: 5,
     shadowColor: '#111',
     shadowOffset: { width: 0, height: 2 },

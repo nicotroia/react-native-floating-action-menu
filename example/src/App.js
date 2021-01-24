@@ -33,14 +33,15 @@ import {
 } from 'react-native-floating-action-menu';
 import tinycolor from 'tinycolor2';
 
-import Header from './components/Header';
 import Label from './components/Label';
+import Header from './components/Header';
+import Dropdown from './components/Dropdown';
 import NumberStepper from './components/NumberStepper';
 
 import styles from './App.styles';
 
-const colorOptions = ['#F53B57', '#3D40C6', '#10BCF9', '#00D8D6', '#04C56B'];
-const items = [
+const COLOR_OPTIONS = ['#F53B57', '#3D40C6', '#10BCF9', '#00D8D6', '#04C56B'];
+const MENU_ITEMS = [
   {
     label: 'Add new User',
     icon: faUserPlus,
@@ -77,13 +78,47 @@ const items = [
     image: require('./assets/icon-1.png'),
   },
 ];
+const EASING_OPTIONS = [
+  {label: 'linear', value: 0, fn: t => t},
+  {label: 'easeInQuad', value: 1, fn: t => t * t},
+  {label: 'easeOutQuad', value: 2, fn: t => t * (2 - t)},
+  {
+    label: 'easeInOutQuad',
+    value: 3,
+    fn: t => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+  },
+  {label: 'easeInCubic', value: 4, fn: t => t * t * t},
+  {label: 'easeOutCubic', value: 5, fn: t => --t * t * t + 1},
+  {
+    label: 'easeInOutCubic',
+    value: 6,
+    fn: t =>
+      t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+  },
+  {label: 'easeInQuart', value: 7, fn: t => t * t * t * t},
+  {label: 'easeOutQuart', value: 8, fn: t => 1 - --t * t * t * t},
+  {
+    label: 'easeInOutQuart',
+    value: 9,
+    fn: t => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t),
+  },
+  {label: 'easeInQuint', value: 10, fn: t => t * t * t * t * t},
+  {label: 'easeOutQuint', value: 11, fn: t => 1 + --t * t * t * t * t},
+  {
+    label: 'easeInOutQuint',
+    value: 12,
+    fn: t => (t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t),
+  },
+];
 
 class App extends React.PureComponent {
   state = {
     noIcons: false,
     isMenuOpen: false,
     numItemsToShow: 3,
-    activeColor: colorOptions[0],
+    activeColor: COLOR_OPTIONS[0],
+    activeOpenEase: EASING_OPTIONS[5].value,
+    activeCloseEase: EASING_OPTIONS[4].value,
     activePosition: constants.MenuPositions.bottomRight,
     itemsPending: {},
   };
@@ -91,7 +126,8 @@ class App extends React.PureComponent {
   static getDerivedStateFromProps(nextProps, prevState) {
     const {numItemsToShow, itemsPending} = prevState;
 
-    let itemsToShow = numItemsToShow > 0 ? items.slice(0, numItemsToShow) : [];
+    let itemsToShow =
+      numItemsToShow > 0 ? MENU_ITEMS.slice(0, numItemsToShow) : [];
     for (let i = 0; i < itemsToShow.length; i++) {
       const item = itemsToShow[i];
 
@@ -107,7 +143,7 @@ class App extends React.PureComponent {
     };
   }
 
-  handleMenuToggle = val => {
+  handleMenuToggle = () => {
     this.setState({isMenuOpen: !this.state.isMenuOpen});
   };
 
@@ -142,6 +178,9 @@ class App extends React.PureComponent {
   handleColorChange = activeColor => () => this.setState({activeColor});
   handlePositionChange = activePosition => () =>
     this.setState({activePosition});
+  handleEaseChange = index => (value, i, data) => {
+    this.setState({[index]: data[i]});
+  };
 
   renderMenuIcon = menuState => {
     const {isMenuOpen, activeColor} = this.state;
@@ -158,7 +197,7 @@ class App extends React.PureComponent {
 
   renderItemIcon = (item, index, menuState) => {
     const {activeColor} = this.state;
-    const {itemsDown, dimmerActive} = menuState;
+    const {itemsDown} = menuState;
 
     if (!item.icon && !item.image) {
       return <Text style={globalStyles.text}>?</Text>;
@@ -295,8 +334,31 @@ class App extends React.PureComponent {
       <View style={styles.colorOptionsContainer}>
         <Label active label="Primary color" style={{marginBottom: 7}} />
         <View style={styles.colorOptionsInner}>
-          {colorOptions.map(this.renderColorOption)}
+          {COLOR_OPTIONS.map(this.renderColorOption)}
         </View>
+      </View>
+    );
+  };
+
+  renderEasingOptions = () => {
+    const {activeOpenEase, activeCloseEase} = this.state;
+
+    return (
+      <View style={styles.easingOptionsContainer}>
+        <Label active label="Open Ease" style={{marginBottom: 7}} />
+        <Dropdown
+          data={EASING_OPTIONS}
+          value={activeOpenEase}
+          isOptional
+          onChangeText={this.handleEaseChange('activeOpenEase')}
+        />
+        <Label active label="Close Ease" style={{marginBottom: 7}} />
+        <Dropdown
+          data={EASING_OPTIONS}
+          value={activeCloseEase}
+          isOptional
+          onChangeText={this.handleEaseChange('activeCloseEase')}
+        />
       </View>
     );
   };
@@ -308,6 +370,8 @@ class App extends React.PureComponent {
       activePosition,
       activeColor,
       itemsToShow,
+      activeOpenEase,
+      activeCloseEase,
     } = this.state;
 
     return (
@@ -324,6 +388,7 @@ class App extends React.PureComponent {
             {this.renderExampleOption()}
             {this.renderNumberStepper()}
             {this.renderColorOptions()}
+            {this.renderEasingOptions()}
           </ScrollView>
 
           <FloatingMenu
@@ -335,6 +400,8 @@ class App extends React.PureComponent {
             renderItemIcon={!noIcons ? this.renderItemIcon : null}
             onMenuToggle={this.handleMenuToggle}
             onItemPress={this.handleItemPress}
+            openEase={activeOpenEase.fn}
+            closeEase={activeCloseEase.fn}
           />
         </View>
       </SafeAreaView>

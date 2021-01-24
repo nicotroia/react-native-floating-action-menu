@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-import { Design } from '@/constants';
-
 export default StyleSheet.create({
   container: {
     position: 'absolute',
@@ -16,8 +14,6 @@ export default StyleSheet.create({
 
   itemContainer: {
     position: 'absolute',
-    width: Design.buttonWidth,
-    minHeight: Design.buttonWidth,
     zIndex: 7,
     flexDirection: 'column',
     alignItems: 'center',
@@ -41,6 +37,6 @@ export default StyleSheet.create({
 
   menuIcon: {
     fontSize: 31,
-    lineHeight: 31,
+    lineHeight: 30,
   },
 });

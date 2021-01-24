@@ -2,8 +2,8 @@ import React from 'react';
 import { Text, View, TouchableWithoutFeedback, Animated } from 'react-native';
 
 import FloatingItem from '@/components/FloatingItem';
-import { Colors, Design, MenuPositions } from '@/constants';
-import { applyButtonWidth } from '@/helpers';
+import { Colors, MenuPositions } from '@/constants';
+import { getButtonWidth, applyButtonWidth } from '@/helpers';
 
 import globalStyles from '@/styles';
 import styles from './styles';
@@ -14,6 +14,8 @@ class FloatingMenu extends React.PureComponent {
     menuButtonDown: false,
     itemsDown: {},
     items: [],
+    buttonWidth: 0,
+    innerWidth: 0,
   };
 
   menuPressAnimation = new Animated.Value(0);
@@ -22,11 +24,13 @@ class FloatingMenu extends React.PureComponent {
   dimmerTimeout = null;
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { items } = nextProps;
+    const { items, buttonWidth, innerWidth } = nextProps;
 
     return {
       ...prevState,
       items: [...items].reverse(),
+      buttonWidth: buttonWidth || getButtonWidth(),
+      innerWidth: innerWidth || getButtonWidth() * 0.8,
     };
   }
 
@@ -164,19 +168,25 @@ class FloatingMenu extends React.PureComponent {
       isOpen,
       position,
       renderItemIcon,
-      buttonWidth,
-      innerWidth,
       backgroundUpColor,
       backgroundDownColor,
       borderColor,
       iconColor,
       primaryColor,
     } = this.props;
-    const { items, itemsDown, dimmerActive } = this.state;
+    const {
+      items,
+      itemsDown,
+      dimmerActive,
+      buttonWidth,
+      innerWidth,
+    } = this.state;
 
     if (!dimmerActive) return null;
 
     return items.map((item, index) => {
+      if (!item) return null;
+
       return (
         <FloatingItem
           key={`item-${index}`}
@@ -224,10 +234,8 @@ class FloatingMenu extends React.PureComponent {
       borderColor: _borderColor,
       iconColor: _iconColor,
       primaryColor,
-      buttonWidth,
-      innerWidth,
     } = this.props;
-    const { menuButtonDown } = this.state;
+    const { menuButtonDown, buttonWidth, innerWidth } = this.state;
 
     const iconColor = _iconColor || primaryColor;
     const borderColor = _borderColor || primaryColor;
@@ -246,7 +254,9 @@ class FloatingMenu extends React.PureComponent {
         style={[
           globalStyles.missingIcon,
           isOpen ? styles.closeIcon : styles.menuIcon,
-          { color: menuButtonDown ? '#fff' : iconColor },
+          {
+            color: menuButtonDown ? '#fff' : iconColor,
+          },
         ]}
       >
         {isOpen ? '×' : '☰'}
@@ -258,7 +268,7 @@ class FloatingMenu extends React.PureComponent {
         style={[
           globalStyles.buttonOuter,
           applyButtonWidth(buttonWidth),
-          { borderColor },
+          { borderColor, marginTop: buttonWidth * 0.3 },
         ]}
       >
         <TouchableWithoutFeedback
@@ -309,6 +319,7 @@ class FloatingMenu extends React.PureComponent {
 
   render = () => {
     const { position, top, left, right, bottom } = this.props;
+    const { buttonWidth } = this.state;
 
     const [vPos, hPos] = position.split('-');
     const vVal =
@@ -322,6 +333,8 @@ class FloatingMenu extends React.PureComponent {
           style={[
             styles.itemContainer,
             {
+              width: buttonWidth,
+              minHeight: buttonWidth,
               [vPos]: vVal,
               [hPos]: hVal,
               flexDirection:
@@ -342,8 +355,6 @@ class FloatingMenu extends React.PureComponent {
 FloatingMenu.defaultProps = {
   items: [],
   primaryColor: Colors.primaryColor,
-  buttonWidth: Design.buttonWidth,
-  innerWidth: Design.buttonWidth - 12,
   position: MenuPositions.bottomRight,
   openEase: t => --t * t * t + 1,
   closeEase: t => t * t * t,

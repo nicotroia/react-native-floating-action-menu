@@ -20,7 +20,7 @@ const Header = () => {
       style={styles.background}
       imageStyle={styles.logo}>
       <Text style={[styles.emoji, {marginBottom: 0}]}>🙋‍♂️</Text>
-      <Text style={[styles.h1, {marginBottom: 21}]}>
+      <Text style={[styles.h1, {marginBottom: 0}]}>
         react-native-floating-action-menu
       </Text>
     </ImageBackground>

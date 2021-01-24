@@ -1,11 +1,9 @@
 import { Dimensions } from 'react-native';
 
 const window = Dimensions.get('window');
-const buttonWidth = Math.min(Math.min(window.width, window.height) * 0.14, 80);
 
 export const Design = {
   window,
-  buttonWidth,
 };
 
 export const Colors = {

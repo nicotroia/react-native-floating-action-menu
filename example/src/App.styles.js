@@ -50,6 +50,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 
+  easingOptionsContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 18,
+    paddingRight: 10,
+    width: '100%',
+    height: 500,
+  },
+
   positionOptionsContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -87,8 +97,8 @@ const styles = StyleSheet.create({
   },
 
   addIcon: {
-    width: '100%',
-    height: '100%',
+    width: '80%',
+    height: '80%',
   },
 });
 
