@@ -1,4 +1,3 @@
-
 <div align="center">
   <h1>react-native-floating-action-menu</h1>
   
@@ -36,15 +35,15 @@ const items = [
 
 ## Item Config
 
-*FloatingItem*
+_FloatingItem_
 
-Prop | description | type | required
---- | --- | --- | ---
-label | Text to display alongside button | string | ✔︎
-labelStyle | Style for the Text element | object | 
-isPending | Will display ActivityIndicator in place of icon when `isPending` is true | boolean | 
-isDisabled | Will disable the item when `isDisabled` is true | boolean | 
-onPress | Callback function called when this item is pressed. This will override the default `onItemPress` callback given to FloatingMenu | function |
+| Prop       | description                                                                                                                     | type     | required |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
+| label      | Text to display alongside button                                                                                                | string   | ✔︎       |
+| labelStyle | Style for the Text element                                                                                                      | object   |
+| isPending  | Will display ActivityIndicator in place of icon when `isPending` is true                                                        | boolean  |
+| isDisabled | Will disable the item when `isDisabled` is true                                                                                 | boolean  |
+| onPress    | Callback function called when this item is pressed. This will override the default `onItemPress` callback given to FloatingMenu | function |
 
 Example:
 
@@ -60,28 +59,28 @@ Example:
 
 ## Menu Config
 
-Prop | description | type | default 
---- | --- | --- | ---
-items | Array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button. | FloatingItem[] | []
-isOpen | Control the menu open/closed state | boolean | false
-position | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right" | string | "bottom-right"
-top | Position in px away from top edge | number | 38
-left | Position in px away from left edge | number | 38
-right | Position in px away from right edge | number | 38
-bottom | Position in px away from bottom edge | number | 38
-primaryColor | Hex color string used for backgrounds, borders, and icons | string | "#213A77"
-backgroundUpColor | Override background color for menu and items UP state. Defaults to `#ffffff`. | string (hex) | -
-backgroundDownColor | Override background color for menu and items DOWN state. Defaults to `primaryColor` value. | string (hex) | -
-borderColor | Override border color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
-iconColor | Override icon color for menu and items. Defaults to `primaryColor` value. | string (hex) | -
-buttonWidth | Width (and also height) of the button | number | 50
-dimmerStyle | Style the background dimmer element | object | -
-openEase | Easing function used for the opening animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>`t => (--t) * t * t + 1`</pre>
-closeEase | Easing function used for the closing animation (see [js easing functions](https://gist.github.com/gre/1650294)) | function | <pre>t => t * t * t</pre>
-renderMenuIcon | Function used to render the icon for menu button. Receives current menu state as an argument. (see below example) | function | -
-renderItemIcon | Function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example) | function | -
-onMenuToggle | Callback function called when the menu has been toggled open or closed. Receives a boolean value | function | -
-onItemPress | Callback function called when a menu item has been pressed. Receives item and index. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored | function | -
+| Prop                | description                                                                                                                                                                                    | type           | default                             |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------- |
+| items               | Array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button.                                                                          | FloatingItem[] | []                                  |
+| isOpen              | Control the menu open/closed state                                                                                                                                                             | boolean        | false                               |
+| position            | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right"                                                                                                                                   | string         | "bottom-right"                      |
+| top                 | Position in px away from top edge                                                                                                                                                              | number         | 38                                  |
+| left                | Position in px away from left edge                                                                                                                                                             | number         | 38                                  |
+| right               | Position in px away from right edge                                                                                                                                                            | number         | 38                                  |
+| bottom              | Position in px away from bottom edge                                                                                                                                                           | number         | 38                                  |
+| primaryColor        | Hex color string used for backgrounds, borders, and icons                                                                                                                                      | string         | "#213A77"                           |
+| backgroundUpColor   | Override background color for menu and items UP state. Defaults to `#ffffff`.                                                                                                                  | string (hex)   | -                                   |
+| backgroundDownColor | Override background color for menu and items DOWN state. Defaults to `primaryColor` value.                                                                                                     | string (hex)   | -                                   |
+| borderColor         | Override border color for menu and items. Defaults to `primaryColor` value.                                                                                                                    | string (hex)   | -                                   |
+| iconColor           | Override icon color for menu and items. Defaults to `primaryColor` value.                                                                                                                      | string (hex)   | -                                   |
+| buttonWidth         | Width (and also height) of the button                                                                                                                                                          | number         | 50                                  |
+| dimmerStyle         | Style the background dimmer element                                                                                                                                                            | object         | -                                   |
+| openEase            | Easing function used for the opening animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>`t => (--t) * t * t + 1`</pre> |
+| closeEase           | Easing function used for the closing animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>t => t _ t _ t</pre>           |
+| renderMenuIcon      | Function used to render the icon for menu button. Receives current menu state as an argument. (see below example)                                                                              | function       | -                                   |
+| renderItemIcon      | Function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example)                                                                 | function       | -                                   |
+| onMenuToggle        | Callback function called when the menu has been toggled open or closed. Receives a boolean value                                                                                               | function       | -                                   |
+| onItemPress         | Callback function called when a menu item has been pressed. Receives item and index. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored | function       | -                                   |
 
 ## Gif Demos
 
@@ -191,7 +190,7 @@ class MyScreen extends React.Component {
       ? <Image source={require('./btn-down.png')} />
       : <Image source={require('./btn-up.png')} />;
   }
-  
+
   renderItemIcon = (item, index, menuState) => {
     const { itemsDown, dimmerActive } = menuState;
 
@@ -243,4 +242,4 @@ class MyScreen extends React.Component {
 
 ## License
 
-MIT © 2019-2020 [Nico Troia](https://nicotroia.com)
+MIT © 2019-2021 [Nico Troia](https://nicotroia.com)
