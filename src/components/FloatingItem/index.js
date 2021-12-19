@@ -39,6 +39,7 @@ const FloatingItem = props => {
     labelStyle,
     isPending,
     isDisabled,
+    style,
     containerStyle,
     buttonStyle,
     buttonInnerStyle,

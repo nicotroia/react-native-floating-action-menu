@@ -1,6 +1,6 @@
 {
   "name": "react-native-floating-action-menu",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "https://github.com/nicotroia/react-native-floating-action-menu.git",
   "main": "dist/index.js",
   "scripts": {
