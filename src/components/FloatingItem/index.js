@@ -34,7 +34,16 @@ const FloatingItem = props => {
     onPressOut,
     onPress,
   } = props;
-  const { label, labelStyle, isPending, isDisabled, ...rest } = item;
+  const {
+    label,
+    labelStyle,
+    isPending,
+    isDisabled,
+    containerStyle,
+    buttonStyle,
+    buttonInnerStyle,
+    ...rest
+  } = item;
 
   const pressAnimation = itemPressAnimations[index];
   const fanAnimation = itemFanAnimations[index];
@@ -131,6 +140,8 @@ const FloatingItem = props => {
           borderColor,
           marginTop: buttonWidth * 0.3,
         },
+        containerStyle,
+        style,
       ]}
       {...rest}
     >
@@ -153,7 +164,7 @@ const FloatingItem = props => {
         </Animated.Text>
 
         <TouchableWithoutFeedback
-          style={globalStyles.button}
+          style={[globalStyles.button, buttonStyle]}
           disabled={isDisabled || isPending || !isOpen}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
           onPressIn={onPressIn}
@@ -165,6 +176,7 @@ const FloatingItem = props => {
               globalStyles.buttonInner,
               applyButtonWidth(innerWidth),
               { backgroundColor },
+              buttonInnerStyle,
             ]}
           >
             {content}
