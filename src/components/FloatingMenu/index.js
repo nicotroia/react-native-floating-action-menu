@@ -323,7 +323,15 @@ class FloatingMenu extends React.PureComponent {
   };
 
   render = () => {
-    const { position, top, left, right, bottom, containerStyle } = this.props;
+    const {
+      position,
+      top,
+      left,
+      right,
+      bottom,
+      containerStyle,
+      itemContainerStyle,
+    } = this.props;
     const { buttonWidth } = this.state;
 
     const [vPos, hPos] = position.split('-');
@@ -369,6 +377,7 @@ FloatingMenu.defaultProps = {
   right: 38,
   bottom: 38,
   containerStyle: {},
+  itemContainerStyle: {},
   buttonOuterStyle: {},
   buttonTouchableStyle: {},
   buttonInnerStyle: {},
