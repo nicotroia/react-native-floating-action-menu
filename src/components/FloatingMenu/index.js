@@ -234,6 +234,9 @@ class FloatingMenu extends React.PureComponent {
       borderColor: _borderColor,
       iconColor: _iconColor,
       primaryColor,
+      buttonOuterStyle,
+      buttonTouchableStyle,
+      buttonInnerStyle,
     } = this.props;
     const { menuButtonDown, buttonWidth, innerWidth } = this.state;
 
@@ -269,10 +272,11 @@ class FloatingMenu extends React.PureComponent {
           globalStyles.buttonOuter,
           applyButtonWidth(buttonWidth),
           { borderColor, marginTop: buttonWidth * 0.3 },
+          buttonOuterStyle,
         ]}
       >
         <TouchableWithoutFeedback
-          style={globalStyles.button}
+          style={[globalStyles.button, buttonTouchableStyle]}
           onPressIn={this.handleItemPressIn(null, this.menuPressAnimation)}
           onPressOut={this.handleItemPressOut(null, this.menuPressAnimation)}
           onPress={this.handleMenuPress}
@@ -283,6 +287,7 @@ class FloatingMenu extends React.PureComponent {
               globalStyles.buttonInner,
               applyButtonWidth(innerWidth),
               { backgroundColor },
+              buttonInnerStyle,
             ]}
           >
             {content}
@@ -318,7 +323,7 @@ class FloatingMenu extends React.PureComponent {
   };
 
   render = () => {
-    const { position, top, left, right, bottom } = this.props;
+    const { position, top, left, right, bottom, containerStyle } = this.props;
     const { buttonWidth } = this.state;
 
     const [vPos, hPos] = position.split('-');
@@ -328,7 +333,7 @@ class FloatingMenu extends React.PureComponent {
       hPos === 'left' ? left || 38 : hPos === 'right' ? right || 38 : 38;
 
     return (
-      <View style={styles.container} pointerEvents="box-none">
+      <View style={[styles.container, containerStyle]} pointerEvents="box-none">
         <View
           style={[
             styles.itemContainer,
@@ -340,6 +345,7 @@ class FloatingMenu extends React.PureComponent {
               flexDirection:
                 vPos.toLowerCase() === 'bottom' ? 'column' : 'column-reverse',
             },
+            itemContainerStyle,
           ]}
           pointerEvents="box-none"
         >
@@ -362,6 +368,10 @@ FloatingMenu.defaultProps = {
   left: 38,
   right: 38,
   bottom: 38,
+  containerStyle: {},
+  buttonOuterStyle: {},
+  buttonTouchableStyle: {},
+  buttonInnerStyle: {},
 };
 
 export default FloatingMenu;

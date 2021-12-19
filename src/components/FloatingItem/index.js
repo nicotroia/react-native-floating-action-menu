@@ -34,7 +34,7 @@ const FloatingItem = props => {
     onPressOut,
     onPress,
   } = props;
-  const { label, labelStyle, isPending, isDisabled } = item;
+  const { label, labelStyle, isPending, isDisabled, ...rest } = item;
 
   const pressAnimation = itemPressAnimations[index];
   const fanAnimation = itemFanAnimations[index];
@@ -132,6 +132,7 @@ const FloatingItem = props => {
           marginTop: buttonWidth * 0.3,
         },
       ]}
+      {...rest}
     >
       <View style={isDisabled && globalStyles.disabled}>
         <Animated.Text
