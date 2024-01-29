@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "checkJs": false,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "target": "es5",
+    "strict": true,
+    "outDir": "./dist",
+    "jsx": "react-native",
+    "lib": ["esnext"],
+    "declaration": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "typeRoots": [
+      "./src/types",
+      "./node_modules",
+      "./node_modules/@types"
+    ],
+    "types": ["react-native"],
+    "incremental": true
+  },
+  "include": [
+    "**/*.tsx",
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/assets",
+    "dist"
+  ]
+}

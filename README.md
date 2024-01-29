@@ -39,7 +39,7 @@ _FloatingItem_
 
 | Prop       | description                                                                                                                     | type     | required |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
-| label      | Text to display alongside button                                                                                                | string   | ✔︎       |
+| label      | Text to display alongside button                                                                                                | string   | ✔︎      |
 | labelStyle | Style for the Text element                                                                                                      | object   |
 | isPending  | Will display ActivityIndicator in place of icon when `isPending` is true                                                        | boolean  |
 | isDisabled | Will disable the item when `isDisabled` is true                                                                                 | boolean  |
@@ -74,10 +74,10 @@ Example:
 | borderColor         | Override border color for menu and items. Defaults to `primaryColor` value.                                                                                                                    | string (hex)   | -                                   |
 | iconColor           | Override icon color for menu and items. Defaults to `primaryColor` value.                                                                                                                      | string (hex)   | -                                   |
 | buttonWidth         | Width (and also height) of the button                                                                                                                                                          | number         | 50                                  |
-| innerWidth          | Width (and also height) of the inner element of the button                                                                                                                                    | number         | -
+| innerWidth          | Width (and also height) of the inner element of the button                                                                                                                                     | number         | -                                   |
 | dimmerStyle         | Style the background dimmer element                                                                                                                                                            | object         | -                                   |
 | openEase            | Easing function used for the opening animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>`t => (--t) * t * t + 1`</pre> |
-| closeEase           | Easing function used for the closing animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>t => t * t * t</pre>           |
+| closeEase           | Easing function used for the closing animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>t => t _ t _ t</pre>           |
 | renderMenuIcon      | Function used to render the icon for menu button. Receives current menu state as an argument. (see below example)                                                                              | function       | -                                   |
 | renderItemIcon      | Function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example)                                                                 | function       | -                                   |
 | onMenuToggle        | Callback function called when the menu has been toggled open or closed. Receives a boolean value                                                                                               | function       | -                                   |
@@ -243,4 +243,4 @@ class MyScreen extends React.Component {
 
 ## License
 
-MIT © 2019-2021 [Nico Troia](https://nicotroia.com)
+MIT © 2019-2024 [internet-nico](https://nicotroia.com)
