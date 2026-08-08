@@ -1,7 +1,7 @@
 {
   "name": "example",
   "version": "1.0.0",
-  "main": "expo/AppEntry",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -17,7 +17,7 @@
     "expo": "~52.0.0",
     "expo-status-bar": "~2.0.0",
     "react": "18.3.1",
-    "react-native": "0.76.9",
+    "react-native": "0.76.5",
     "react-native-floating-action-menu": "file:..",
     "react-native-svg": "~15.8.0",
     "tinycolor2": "^1.6.0"
