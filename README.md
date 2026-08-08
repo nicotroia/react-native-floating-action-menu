@@ -83,6 +83,7 @@ Any additional `ViewProps` are spread onto the outer container.
 | renderItemIcon        | Render prop for item icons. Receives item, index, and render state.                                                                             | `(item, index, state: RenderState) => React.ReactNode`         | —                   |
 | renderButtonContainer | Render prop that replaces the default button container `View`. Use this to position the menu with Reanimated or any external animation library. | `(children, style) => React.ReactElement`                      | —                   |
 | onMenuToggle          | Called when the menu button is pressed. Receives the new open state.                                                                            | `(open: boolean) => void`                                      | —                   |
+| onPress               | Called when the button is pressed and `items` is empty — use this to make the FAB a standalone button.                                          | `(event: GestureResponderEvent) => void`                       | —                   |
 | onItemPress           | Called when an item is pressed. Receives the item and its index. Ignored if the item defines its own `onPress`.                                 | `(item: ItemConfig, index: number) => void`                    | —                   |
 
 ## Gif Demos

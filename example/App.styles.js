@@ -8,19 +8,14 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
     padding: 21,
+    paddingBottom: 100,
   },
   scrollView: {
     backgroundColor: '#f5f5f5',
-  },
-  body: {
-    position: 'relative',
-    width: '100%',
-    backgroundColor: '#0000ff99',
   },
   numberStepperContainer: {
     borderWidth: 1,
@@ -34,7 +29,6 @@ const styles = StyleSheet.create({
     marginBottom: 21,
     width: '100%',
   },
-
   colorOptionsContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -49,7 +43,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
-
   easingOptionsContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -57,9 +50,11 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     paddingRight: 10,
     width: '100%',
-    height: 500,
   },
-
+  picker: {
+    width: '100%',
+    marginBottom: 14,
+  },
   positionOptionsContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -74,13 +69,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
-
   swatch: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   positionOption: {
     height: 36,
     lineHeight: 22,
@@ -91,11 +84,9 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     marginHorizontal: 10,
   },
-
   positionActive: {
     borderColor: constants.Colors.secondaryColor,
   },
-
   addIcon: {
     width: '80%',
     height: '80%',

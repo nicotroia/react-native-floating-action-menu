@@ -15,6 +15,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+
 import { FloatingItem } from "@/components/FloatingItem";
 import { Colors, MenuPositions } from "@/constants";
 import { applyButtonWidth, getButtonWidth } from "@/helpers";
@@ -67,6 +68,8 @@ export type FloatingMenuProps = {
   menuOpenLabel?: string;
   /** Accessible label for the button when the menu is open. Default: "Close menu" */
   menuCloseLabel?: string;
+  /** Called when the button is pressed and there are no items — use this to make the FAB a standalone button */
+  onPress?: (event: GestureResponderEvent) => void;
   /**
    * Render prop that replaces the default View wrapping the FAB button and
    * its items. Use this to position the menu with an external animation
@@ -124,6 +127,7 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
   renderButtonContainer,
   menuOpenLabel = "Open menu",
   menuCloseLabel = "Close menu",
+  onPress,
 }) => {
   const [dimmerActive, setDimmerActive] = useState(false);
   const [menuButtonDown, setMenuButtonDown] = useState(false);
@@ -153,6 +157,7 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
   const toggleMenu = useCallback(
     (open: boolean) => {
       const numItems = reversedItems.length;
+      if (numItems === 0) return;
       const options = {
         toValue: open ? 1.0 : 0.0,
         duration: 142 - Math.max(numItems - 2, 0) * 5,
@@ -250,9 +255,13 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
     [reversedItems, onItemPress]
   );
 
-  const handleMenuPress = useCallback(() => {
-    onMenuToggle?.(!isOpen);
-  }, [isOpen, onMenuToggle]);
+  const handleMenuPress = useCallback((event: GestureResponderEvent) => {
+    if (reversedItems.length === 0) {
+      onPress?.(event);
+    } else {
+      onMenuToggle?.(!isOpen);
+    }
+  }, [isOpen, onMenuToggle, onPress, reversedItems.length]);
 
   const renderState: RenderState = {
     dimmerActive,
@@ -312,6 +321,8 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
     ],
   });
 
+  const hasItems = reversedItems.length > 0;
+
   const menuContent = renderMenuIcon ? (
     renderMenuIcon(renderState)
   ) : (
@@ -319,10 +330,10 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
       accessible={false}
       style={[
         globalStyles.missingIcon,
-        isOpen ? styles.closeIcon : styles.menuIcon,
+        hasItems && isOpen ? styles.closeIcon : styles.menuIcon,
         { color: menuButtonDown ? "#fff" : iconColor },
       ]}>
-      {isOpen ? "×" : "☰"}
+      {hasItems && isOpen ? "×" : "☰"}
     </Text>
   );
 
@@ -337,8 +348,8 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
       <TouchableWithoutFeedback
         accessible={true}
         accessibilityRole="button"
-        accessibilityLabel={isOpen ? menuCloseLabel : menuOpenLabel}
-        accessibilityState={{ expanded: isOpen }}
+        accessibilityLabel={hasItems && isOpen ? menuCloseLabel : menuOpenLabel}
+        accessibilityState={hasItems ? { expanded: isOpen } : undefined}
         style={[globalStyles.button, buttonTouchableStyle]}
         onPressIn={handleItemPressIn(null, menuPressAnimation.current)}
         onPressOut={handleItemPressOut(null, menuPressAnimation.current)}
@@ -408,7 +419,7 @@ export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
     <View
       style={[styles.container, containerStyle]}
       pointerEvents="box-none"
-      accessibilityViewIsModal={dimmerActive}>
+      accessibilityViewIsModal={dimmerActive && hasItems}>
       {renderButtonContainer ? (
         renderButtonContainer(buttonContainerChildren, buttonContainerStyle)
       ) : (

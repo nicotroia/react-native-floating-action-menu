@@ -1,31 +1,19 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @flow strict-local
- * @format
- */
-
-import {ImageBackground, StyleSheet, Text} from 'react-native';
-import {constants} from 'react-native-floating-action-menu';
 import React from 'react';
+import { ImageBackground, StyleSheet, Text } from 'react-native';
+import { constants } from 'react-native-floating-action-menu';
 
-const Header = () => {
+export default function Header() {
   return (
     <ImageBackground
       accessibilityRole="image"
       source={require('../../assets/logo.png')}
       style={styles.background}
       imageStyle={styles.logo}>
-      <Text style={[styles.emoji, {marginBottom: 0}]}>🙋‍♂️</Text>
-      <Text style={[styles.h1, {marginBottom: 0}]}>
-        react-native-floating-action-menu
-      </Text>
+      <Text style={styles.emoji}>🙋‍♂️</Text>
+      <Text style={styles.h1}>react-native-floating-action-menu</Text>
     </ImageBackground>
   );
-};
+}
 
 const styles = StyleSheet.create({
   background: {
@@ -38,12 +26,6 @@ const styles = StyleSheet.create({
     opacity: 0.2,
     overflow: 'visible',
     resizeMode: 'cover',
-    /*
-     * These negative margins allow the image to be offset similarly across screen sizes and component sizes.
-     *
-     * The source logo.png image is 512x512px, so as such, these margins attempt to be relative to the
-     * source image's size.
-     */
     marginLeft: -128,
     marginBottom: -192,
   },
@@ -59,5 +41,3 @@ const styles = StyleSheet.create({
     color: constants.Colors.primaryColor,
   },
 });
-
-export default Header;

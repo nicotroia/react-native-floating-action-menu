@@ -1,133 +1,74 @@
-import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
-import {globalStyles} from 'react-native-floating-action-menu';
+import React, { useRef, useCallback } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { globalStyles } from 'react-native-floating-action-menu';
 
 import styles from './styles';
 
-const repeatDelay = 420;
-const repeatInterval = 100;
+const REPEAT_DELAY = 420;
+const REPEAT_INTERVAL = 100;
 
-class NumberStepper extends React.PureComponent {
-  incrementDelayTimer = null;
-  incrementIntervalTimer = null;
-  decrementDelayTimer = null;
-  decrementIntervalTimer = null;
+export default function NumberStepper({ value, onChange, min = 0, max = 99 }) {
+  const incrementDelay = useRef(null);
+  const incrementInterval = useRef(null);
+  const decrementDelay = useRef(null);
+  const decrementInterval = useRef(null);
 
-  increment = () => {
-    const {value, onChange, max} = this.props;
+  const increment = useCallback(() => {
+    onChange(prev => Math.min(prev + 1, max));
+  }, [onChange, max]);
 
-    let newVal = value + 1;
-    if (newVal > max) {
-      newVal = max;
-    }
+  const decrement = useCallback(() => {
+    onChange(prev => Math.max(prev - 1, min));
+  }, [onChange, min]);
 
-    onChange(newVal);
-  };
+  const handleIncrementPressIn = useCallback(() => {
+    increment();
+    incrementDelay.current = setTimeout(() => {
+      incrementInterval.current = setInterval(increment, REPEAT_INTERVAL);
+    }, REPEAT_DELAY);
+  }, [increment]);
 
-  decrement = () => {
-    const {value, onChange, min} = this.props;
+  const handleIncrementPressOut = useCallback(() => {
+    clearTimeout(incrementDelay.current);
+    clearInterval(incrementInterval.current);
+  }, []);
 
-    let newVal = value - 1;
-    if (newVal < min) {
-      newVal = min;
-    }
+  const handleDecrementPressIn = useCallback(() => {
+    decrement();
+    decrementDelay.current = setTimeout(() => {
+      decrementInterval.current = setInterval(decrement, REPEAT_INTERVAL);
+    }, REPEAT_DELAY);
+  }, [decrement]);
 
-    onChange(newVal);
-  };
+  const handleDecrementPressOut = useCallback(() => {
+    clearTimeout(decrementDelay.current);
+    clearInterval(decrementInterval.current);
+  }, []);
 
-  handleIncrementPressIn = () => {
-    this.increment();
-    this.startIncrementTimer();
-  };
+  const decrementDisabled = value <= min;
+  const incrementDisabled = value >= max;
 
-  handleDecrementPressIn = () => {
-    this.decrement();
-    this.startDecrementTimer();
-  };
-
-  startIncrementTimer = () => {
-    this.incrementDelayTimer = setTimeout(() => {
-      this.increment();
-      this.incrementIntervalTimer = setInterval(() => {
-        this.increment();
-      }, repeatInterval);
-    }, repeatDelay);
-  };
-
-  startDecrementTimer = () => {
-    this.decrementDelayTimer = setTimeout(() => {
-      this.decrement();
-      this.decrementIntervalTimer = setInterval(() => {
-        this.decrement();
-      }, repeatInterval);
-    }, repeatDelay);
-  };
-
-  stopIncrementTimer = () => {
-    if (this.incrementDelayTimer) {
-      clearTimeout(this.incrementDelayTimer);
-      this.incrementDelayTimer = null;
-    }
-    if (this.incrementIntervalTimer) {
-      clearTimeout(this.incrementIntervalTimer);
-      this.incrementIntervalTimer = null;
-    }
-  };
-
-  stopDecrementTimer = () => {
-    if (this.decrementDelayTimer) {
-      clearTimeout(this.decrementDelayTimer);
-      this.decrementDelayTimer = null;
-    }
-    if (this.decrementIntervalTimer) {
-      clearTimeout(this.decrementIntervalTimer);
-      this.decrementIntervalTimer = null;
-    }
-  };
-
-  render() {
-    const {value, min, max} = this.props;
-
-    const decrementDisabled = value <= min;
-    const incrementDisabled = value >= max;
-
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPressIn={this.handleDecrementPressIn}
-          onPressOut={this.stopDecrementTimer}
-          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
-          disabled={decrementDisabled}
-          style={decrementDisabled ? styles.disabled : null}>
-          <FontAwesomeIcon
-            style={styles.decrementButton}
-            size={24}
-            icon={faMinus}
-          />
-        </TouchableOpacity>
-        <Text style={[globalStyles.text, styles.value]}>{value}</Text>
-        <TouchableOpacity
-          onPressIn={this.handleIncrementPressIn}
-          onPressOut={this.stopIncrementTimer}
-          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
-          disabled={incrementDisabled}
-          style={incrementDisabled ? styles.disabled : null}>
-          <FontAwesomeIcon
-            style={styles.incrementButton}
-            size={24}
-            icon={faPlus}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPressIn={handleDecrementPressIn}
+        onPressOut={handleDecrementPressOut}
+        hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+        disabled={decrementDisabled}
+        style={decrementDisabled ? styles.disabled : null}>
+        <FontAwesomeIcon style={styles.decrementButton} size={24} icon={faMinus} />
+      </TouchableOpacity>
+      <Text style={[globalStyles.text, styles.value]}>{value}</Text>
+      <TouchableOpacity
+        onPressIn={handleIncrementPressIn}
+        onPressOut={handleIncrementPressOut}
+        hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+        disabled={incrementDisabled}
+        style={incrementDisabled ? styles.disabled : null}>
+        <FontAwesomeIcon style={styles.incrementButton} size={24} icon={faPlus} />
+      </TouchableOpacity>
+    </View>
+  );
 }
-
-NumberStepper.defaultProps = {
-  min: 0,
-  max: 99,
-};
-
-export default NumberStepper;
