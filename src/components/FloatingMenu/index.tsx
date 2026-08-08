@@ -1,6 +1,13 @@
-import React from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
+  GestureResponderEvent,
   StyleProp,
   Text,
   TouchableWithoutFeedback,
@@ -14,15 +21,15 @@ import { applyButtonWidth, getButtonWidth } from "@/helpers";
 import { ItemConfig, Position } from "@/types";
 
 import styles from "./styles";
-import globalStyles from "@/styles";
+import { globalStyles } from "@/styles";
 
 export type RenderState = {
   dimmerActive: boolean;
   menuButtonDown: boolean;
   itemsDown: Record<number, boolean>;
-  items: [];
-  buttonWidth: 0;
-  innerWidth: 0;
+  items: ItemConfig[];
+  buttonWidth: number;
+  innerWidth: number;
 };
 
 export type FloatingMenuProps = {
@@ -31,7 +38,7 @@ export type FloatingMenuProps = {
   innerWidth?: number;
   isOpen: boolean;
   onItemPress?: (item: ItemConfig, index: number) => void;
-  position: Position;
+  position?: Position;
   top?: number;
   left?: number;
   right?: number;
@@ -39,393 +46,379 @@ export type FloatingMenuProps = {
   containerStyle?: StyleProp<ViewStyle>;
   itemContainerStyle?: StyleProp<ViewStyle>;
   onMenuToggle?: (open: boolean) => void;
-  openEase: Function;
-  closeEase: Function;
+  openEase?: (t: number) => number;
+  closeEase?: (t: number) => number;
+  backgroundUpColor?: string;
+  backgroundDownColor?: string;
+  borderColor?: string;
+  iconColor?: string;
+  primaryColor?: string;
+  buttonOuterStyle?: StyleProp<ViewStyle>;
+  buttonTouchableStyle?: StyleProp<ViewStyle>;
+  buttonInnerStyle?: StyleProp<ViewStyle>;
+  dimmerStyle?: StyleProp<ViewStyle>;
+  renderMenuIcon?: (props: RenderState) => React.ReactNode;
   renderItemIcon?: (
     item: ItemConfig,
     index: number,
     props: RenderState
   ) => React.ReactNode;
-  backgroundUpColor?: string;
-  backgroundDownColor?: string;
-  borderColor?: string;
-  iconColor?: string;
-  primaryColor: string;
-  renderMenuIcon?: (props: RenderState) => React.ReactNode;
-  buttonOuterStyle?: StyleProp<ViewStyle>;
-  buttonTouchableStyle?: StyleProp<ViewStyle>;
-  buttonInnerStyle?: StyleProp<ViewStyle>;
-  dimmerStyle?: StyleProp<ViewStyle>;
+  /** Accessible label for the button when the menu is closed. Default: "Open menu" */
+  menuOpenLabel?: string;
+  /** Accessible label for the button when the menu is open. Default: "Close menu" */
+  menuCloseLabel?: string;
+  /**
+   * Render prop that replaces the default View wrapping the FAB button and
+   * its items. Use this to position the menu with an external animation
+   * library such as Reanimated:
+   *
+   *   renderButtonContainer={(children, style) => (
+   *     <Animated.View style={[style, animatedStyle]} pointerEvents="box-none">
+   *       {children}
+   *     </Animated.View>
+   *   )}
+   *
+   * The default position/size styles are passed as `style` so you can merge
+   * or ignore them as needed. Remember to forward `pointerEvents="box-none"`
+   * so touches pass through to the button.
+   */
+  renderButtonContainer?: (
+    children: React.ReactNode,
+    style: StyleProp<ViewStyle>
+  ) => React.ReactElement;
 };
 
-export class FloatingMenu extends React.PureComponent<
-  FloatingMenuProps,
-  RenderState
-> {
-  state: Readonly<RenderState> = {
-    dimmerActive: false,
-    menuButtonDown: false,
-    itemsDown: {},
-    items: [],
-    buttonWidth: 0,
-    innerWidth: 0,
-  };
+const OpenEase = (t: number) => {
+  const s = t - 1;
+  return s * s * s + 1;
+};
+const CloseEase = (t: number) => t * t * t;
 
-  menuPressAnimation = new Animated.Value(0);
-  itemPressAnimations = {};
-  itemFanAnimations = {};
-  dimmerTimeout: ReturnType<typeof setTimeout> | null = null;
+export const FloatingMenuComponent: React.FC<FloatingMenuProps> = ({
+  items,
+  buttonWidth: buttonWidthProp,
+  innerWidth: innerWidthProp,
+  isOpen,
+  onItemPress,
+  position = MenuPositions.bottomRight as Position,
+  top = 38,
+  left = 38,
+  right = 38,
+  bottom = 38,
+  containerStyle,
+  itemContainerStyle,
+  onMenuToggle,
+  openEase = OpenEase,
+  closeEase = CloseEase,
+  backgroundUpColor,
+  backgroundDownColor,
+  borderColor: borderColorProp,
+  iconColor: iconColorProp,
+  primaryColor = Colors.primaryColor,
+  buttonOuterStyle,
+  buttonTouchableStyle,
+  buttonInnerStyle,
+  dimmerStyle,
+  renderMenuIcon,
+  renderItemIcon,
+  renderButtonContainer,
+  menuOpenLabel = "Open menu",
+  menuCloseLabel = "Close menu",
+}) => {
+  const [dimmerActive, setDimmerActive] = useState(false);
+  const [menuButtonDown, setMenuButtonDown] = useState(false);
+  const [itemsDown, setItemsDown] = useState<Record<number, boolean>>({});
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { items, buttonWidth, innerWidth } = nextProps;
+  const buttonWidth = buttonWidthProp ?? getButtonWidth();
+  const innerWidth = innerWidthProp ?? buttonWidth * 0.8;
+  const reversedItems = useMemo(() => [...items].reverse(), [items]);
 
-    return {
-      ...prevState,
-      items: [...items].reverse(),
-      buttonWidth: buttonWidth || getButtonWidth(),
-      innerWidth: innerWidth || getButtonWidth() * 0.8,
-    };
-  }
+  const menuPressAnimation = useRef(new Animated.Value(0));
+  const itemPressAnimations = useRef<Record<number, Animated.Value>>({});
+  const itemFanAnimations = useRef<Record<number, Animated.Value>>({});
+  const dimmerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasMounted = useRef(false);
 
-  componentDidMount() {
-    this.initAnimations();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { isOpen } = this.props;
-    const { items } = this.state;
-
-    if (prevProps.items.length !== items.length) {
-      this.initAnimations();
-    }
-
-    if (prevProps.isOpen && !isOpen) {
-      // Close menu
-      this.toggleMenu(false);
-    } else if (!prevProps.isOpen && isOpen) {
-      // Open menu
-      this.toggleMenu(true);
-    }
-  }
-
-  initAnimations = () => {
-    const { items } = this.state;
-
-    if (!this.menuPressAnimation)
-      this.menuPressAnimation = new Animated.Value(0);
-    for (let i = 0; i < items.length; i++) {
-      if (!this.itemPressAnimations[i]) {
-        this.itemPressAnimations[i] = new Animated.Value(0);
+  useEffect(() => {
+    for (let i = 0; i < reversedItems.length; i++) {
+      if (!itemPressAnimations.current[i]) {
+        itemPressAnimations.current[i] = new Animated.Value(0);
       }
-      if (i < items.length && !this.itemFanAnimations[i]) {
-        this.itemFanAnimations[i] = new Animated.Value(0);
+      if (!itemFanAnimations.current[i]) {
+        itemFanAnimations.current[i] = new Animated.Value(0);
       }
     }
-  };
+  }, [reversedItems.length]);
 
-  handleItemPressIn =
-    (index, animatedValue, useNativeDriver = false) =>
-    () => {
-      // Animate in
-      Animated.timing(animatedValue, {
-        toValue: 1.0,
-        duration: 14,
-        useNativeDriver,
-      }).start();
+  const toggleMenu = useCallback(
+    (open: boolean) => {
+      const numItems = reversedItems.length;
+      const options = {
+        toValue: open ? 1.0 : 0.0,
+        duration: 142 - Math.max(numItems - 2, 0) * 5,
+        tension: 30,
+        friction: 5,
+        useNativeDriver: true,
+      };
 
-      if (index === null) {
-        this.setState({ menuButtonDown: true });
-      } else {
-        this.setState({
-          itemsDown: { ...this.state.itemsDown, [index]: true },
+      let totalDelay = 0;
+      for (let i = 0; i < numItems; i++) {
+        const t = (open ? i : numItems - i - 1) / numItems;
+        const ease = open ? openEase(t) : closeEase(t);
+        const time = (150 / Math.min(Math.max(numItems, 0), 8)) * i + 160;
+        const delay = Math.max(Math.min(time * ease, 300), 0);
+        totalDelay = delay + time;
+
+        Animated.delay(delay).start(() => {
+          Animated.spring(itemFanAnimations.current[i], options).start();
         });
       }
-    };
 
-  handleItemPressOut =
-    (index, animatedValue, useNativeDriver = false) =>
-    () => {
-      // Animate out
-      Animated.timing(animatedValue, {
-        toValue: 0.0,
-        duration: 142,
-        useNativeDriver,
-      }).start();
-
-      if (index === null) {
-        this.setState({ menuButtonDown: false });
+      if (dimmerTimeoutRef.current) clearTimeout(dimmerTimeoutRef.current);
+      if (open) {
+        setDimmerActive(true);
       } else {
-        this.setState({
-          itemsDown: { ...this.state.itemsDown, [index]: false },
-        });
+        dimmerTimeoutRef.current = setTimeout(() => {
+          setDimmerActive(false);
+        }, totalDelay);
       }
-    };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reversedItems.length, openEase, closeEase]
+  );
 
-  handleItemPress = index => event => {
-    const { onItemPress } = this.props;
-    const { items } = this.state;
-    const item: ItemConfig = items[index];
-
-    if (!item) return;
-
-    if (item.onPress) {
-      item.onPress(event, index);
-    } else if (onItemPress) {
-      onItemPress(item, index);
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
     }
-  };
+    toggleMenu(isOpen);
+  }, [isOpen, toggleMenu]);
 
-  handleMenuPress = () => {
-    const { isOpen, onMenuToggle } = this.props;
+  const handleItemPressIn = useCallback(
+    (
+      index: number | null,
+      animatedValue: Animated.Value,
+      useNativeDriver = false
+    ) =>
+      () => {
+        Animated.timing(animatedValue, {
+          toValue: 1.0,
+          duration: 14,
+          useNativeDriver,
+        }).start();
+        if (index === null) {
+          setMenuButtonDown(true);
+        } else {
+          setItemsDown(prev => ({ ...prev, [index]: true }));
+        }
+      },
+    []
+  );
 
+  const handleItemPressOut = useCallback(
+    (
+      index: number | null,
+      animatedValue: Animated.Value,
+      useNativeDriver = false
+    ) =>
+      () => {
+        Animated.timing(animatedValue, {
+          toValue: 0.0,
+          duration: 142,
+          useNativeDriver,
+        }).start();
+        if (index === null) {
+          setMenuButtonDown(false);
+        } else {
+          setItemsDown(prev => ({ ...prev, [index]: false }));
+        }
+      },
+    []
+  );
+
+  const handleItemPress = useCallback(
+    (index: number) => (event: GestureResponderEvent) => {
+      const item = reversedItems[index];
+      if (!item) return;
+      if (item.onPress) {
+        item.onPress(event, index);
+      } else {
+        onItemPress?.(item, index);
+      }
+    },
+    [reversedItems, onItemPress]
+  );
+
+  const handleMenuPress = useCallback(() => {
     onMenuToggle?.(!isOpen);
+  }, [isOpen, onMenuToggle]);
+
+  const renderState: RenderState = {
+    dimmerActive,
+    menuButtonDown,
+    itemsDown,
+    items: reversedItems,
+    buttonWidth,
+    innerWidth,
   };
 
-  toggleMenu = isOpen => {
-    const { openEase, closeEase } = this.props;
-    const { items } = this.state;
+  const itemElements = dimmerActive
+    ? reversedItems.map((item, index) => {
+        if (!item) return null;
+        return (
+          <FloatingItem
+            key={`item-${index}`}
+            {...item}
+            item={item}
+            index={index}
+            icon={
+              renderItemIcon ? renderItemIcon(item, index, renderState) : null
+            }
+            position={position}
+            isOpen={isOpen || dimmerActive}
+            backgroundUpColor={backgroundUpColor}
+            backgroundDownColor={backgroundDownColor}
+            borderColor={borderColorProp}
+            iconColor={iconColorProp}
+            primaryColor={primaryColor || "#475aff"}
+            buttonWidth={buttonWidth}
+            innerWidth={innerWidth}
+            numItems={reversedItems.length}
+            itemsDown={itemsDown}
+            itemFanAnimations={itemFanAnimations.current}
+            itemPressAnimations={itemPressAnimations.current}
+            onPress={handleItemPress(index)}
+            onPressIn={handleItemPressIn(
+              index,
+              itemPressAnimations.current[index]
+            )}
+            onPressOut={handleItemPressOut(
+              index,
+              itemPressAnimations.current[index]
+            )}
+          />
+        );
+      })
+    : null;
 
-    const options = {
-      toValue: isOpen ? 1.0 : 0.0,
-      duration: 142 - Math.max(items.length - 2, 0) * 5,
-      tension: 30,
-      friction: 5,
-      useNativeDriver: true,
-    };
+  const iconColor = iconColorProp || primaryColor;
+  const borderColor = borderColorProp || primaryColor;
+  const menuBgColor = menuPressAnimation.current.interpolate({
+    inputRange: [0.0, 1.0],
+    outputRange: [
+      backgroundUpColor || "#ffffff",
+      backgroundDownColor || primaryColor || "#475aff",
+    ],
+  });
 
-    // Fan items
-    let totalDelay = 0;
-    for (let i = 0; i < items.length; i++) {
-      const t = (isOpen ? i : items.length - i - 1) / items.length;
-      const ease = isOpen ? openEase(t) : closeEase(t);
-      const time = (150 / Math.min(Math.max(items.length, 0), 8)) * i + 160;
-      const delay = Math.max(Math.min(time * ease, 300), 0);
+  const menuContent = renderMenuIcon ? (
+    renderMenuIcon(renderState)
+  ) : (
+    <Text
+      accessible={false}
+      style={[
+        globalStyles.missingIcon,
+        isOpen ? styles.closeIcon : styles.menuIcon,
+        { color: menuButtonDown ? "#fff" : iconColor },
+      ]}>
+      {isOpen ? "×" : "☰"}
+    </Text>
+  );
 
-      totalDelay = delay + time;
-
-      Animated.delay(delay).start(() => {
-        Animated.spring(this.itemFanAnimations[i], options).start();
-      });
-    }
-
-    // Toggle dimmer
-    this.dimmerTimeout && clearTimeout(this.dimmerTimeout);
-    if (isOpen) {
-      this.setState({ dimmerActive: true });
-    } else {
-      // Deactivate dimmer after animation completes
-      this.dimmerTimeout = setTimeout(() => {
-        this.setState({ dimmerActive: false });
-      }, totalDelay);
-    }
-  };
-
-  renderItems = () => {
-    const {
-      isOpen,
-      position,
-      renderItemIcon,
-      backgroundUpColor,
-      backgroundDownColor,
-      borderColor,
-      iconColor,
-      primaryColor,
-    } = this.props;
-    const { items, itemsDown, dimmerActive, buttonWidth, innerWidth } =
-      this.state;
-
-    if (!dimmerActive) return null;
-
-    return items.map((item: ItemConfig, index) => {
-      if (!item) return null;
-
-      return (
-        <FloatingItem
-          key={`item-${index}`}
-          {...item}
-          item={item}
-          index={index}
-          icon={
-            renderItemIcon
-              ? renderItemIcon(item, index, { ...this.state })
-              : null
-          }
-          position={position}
-          isOpen={isOpen || dimmerActive}
-          backgroundUpColor={backgroundUpColor}
-          backgroundDownColor={backgroundDownColor}
-          borderColor={borderColor}
-          iconColor={iconColor}
-          primaryColor={primaryColor}
-          buttonWidth={buttonWidth}
-          innerWidth={innerWidth}
-          numItems={items.length}
-          itemsDown={itemsDown}
-          itemFanAnimations={this.itemFanAnimations}
-          itemPressAnimations={this.itemPressAnimations}
-          onPress={this.handleItemPress(index)}
-          onPressIn={this.handleItemPressIn(
-            index,
-            this.itemPressAnimations[index]
-          )}
-          onPressOut={this.handleItemPressOut(
-            index,
-            this.itemPressAnimations[index]
-          )}
-        />
-      );
-    });
-  };
-
-  renderMenuButton = () => {
-    const {
-      renderMenuIcon,
-      isOpen,
-      backgroundUpColor,
-      backgroundDownColor,
-      borderColor: _borderColor,
-      iconColor: _iconColor,
-      primaryColor,
-      buttonOuterStyle,
-      buttonTouchableStyle,
-      buttonInnerStyle,
-    } = this.props;
-    const { menuButtonDown, buttonWidth, innerWidth } = this.state;
-
-    const iconColor = _iconColor || primaryColor;
-    const borderColor = _borderColor || primaryColor;
-    const backgroundColor = this.menuPressAnimation.interpolate({
-      inputRange: [0.0, 1.0],
-      outputRange: [
-        backgroundUpColor || "#ffffff",
-        backgroundDownColor || primaryColor,
-      ],
-    });
-
-    const content = renderMenuIcon ? (
-      renderMenuIcon({ ...this.state })
-    ) : (
-      <Text
-        style={[
-          globalStyles.missingIcon,
-          isOpen ? styles.closeIcon : styles.menuIcon,
-          {
-            color: menuButtonDown ? "#fff" : iconColor,
-          },
-        ]}>
-        {isOpen ? "×" : "☰"}
-      </Text>
-    );
-
-    return (
-      <View
-        style={[
-          globalStyles.buttonOuter,
-          applyButtonWidth(buttonWidth),
-          { borderColor, marginTop: buttonWidth * 0.3 },
-          buttonOuterStyle,
-        ]}>
-        <TouchableWithoutFeedback
-          style={[globalStyles.button, buttonTouchableStyle]}
-          onPressIn={this.handleItemPressIn(null, this.menuPressAnimation)}
-          onPressOut={this.handleItemPressOut(null, this.menuPressAnimation)}
-          onPress={this.handleMenuPress}
-          hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}>
-          <Animated.View
-            style={[
-              globalStyles.buttonInner,
-              applyButtonWidth(innerWidth),
-              { backgroundColor },
-              buttonInnerStyle,
-            ]}>
-            {content}
-          </Animated.View>
-        </TouchableWithoutFeedback>
-      </View>
-    );
-  };
-
-  renderDimmer = () => {
-    const { isOpen, dimmerStyle } = this.props;
-    const { items, dimmerActive } = this.state;
-
-    const fanAnimation = this.itemFanAnimations[0];
-    const opacity =
-      fanAnimation &&
-      fanAnimation.interpolate({
-        inputRange: [0.0, 1.0],
-        outputRange: [0.5, 1.0],
-        extrapolate: "clamp",
-      });
-
-    return dimmerActive && items.length ? (
+  const menuButton = (
+    <View
+      style={[
+        globalStyles.buttonOuter,
+        applyButtonWidth(buttonWidth),
+        { borderColor, marginTop: buttonWidth * 0.3 },
+        buttonOuterStyle,
+      ]}>
       <TouchableWithoutFeedback
-        disabled={!isOpen}
-        onPress={this.handleMenuPress}>
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel={isOpen ? menuCloseLabel : menuOpenLabel}
+        accessibilityState={{ expanded: isOpen }}
+        style={[globalStyles.button, buttonTouchableStyle]}
+        onPressIn={handleItemPressIn(null, menuPressAnimation.current)}
+        onPressOut={handleItemPressOut(null, menuPressAnimation.current)}
+        onPress={handleMenuPress}
+        hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}>
         <Animated.View
-          style={[globalStyles.dimmer, styles.dimmer, { opacity }, dimmerStyle]}
+          style={[
+            globalStyles.buttonInner,
+            applyButtonWidth(innerWidth),
+            { backgroundColor: menuBgColor },
+            buttonInnerStyle,
+          ]}>
+          {menuContent}
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
+
+  const fanAnimation0 = itemFanAnimations.current[0];
+  const dimmerOpacity = fanAnimation0?.interpolate({
+    inputRange: [0.0, 1.0],
+    outputRange: [0.5, 1.0],
+    extrapolate: "clamp",
+  });
+
+  const dimmer =
+    dimmerActive && reversedItems.length ? (
+      <TouchableWithoutFeedback
+        accessible={false}
+        disabled={!isOpen}
+        onPress={handleMenuPress}>
+        <Animated.View
+          style={[
+            globalStyles.dimmer,
+            styles.dimmer,
+            { opacity: dimmerOpacity },
+            dimmerStyle,
+          ]}
         />
       </TouchableWithoutFeedback>
     ) : null;
-  };
 
-  render = () => {
-    const {
-      position,
-      top,
-      left,
-      right,
-      bottom,
-      containerStyle,
-      itemContainerStyle,
-    } = this.props;
-    const { buttonWidth } = this.state;
+  const [vPos, hPos] = position.split("-");
+  const vVal = vPos === "top" ? top : bottom;
+  const hVal = hPos === "left" ? left : right;
 
-    const [vPos, hPos] = position.split("-");
-    const vVal =
-      vPos === "top" ? top || 38 : vPos === "bottom" ? bottom || 38 : 38;
-    const hVal =
-      hPos === "left" ? left || 38 : hPos === "right" ? right || 38 : 38;
+  const buttonContainerStyle: StyleProp<ViewStyle> = [
+    styles.itemContainer,
+    {
+      width: buttonWidth,
+      minHeight: buttonWidth,
+      [vPos]: vVal,
+      [hPos]: hVal,
+      flexDirection: vPos === "bottom" ? "column" : "column-reverse",
+    } as ViewStyle,
+    itemContainerStyle,
+  ];
 
-    return (
-      <View style={[styles.container, containerStyle]} pointerEvents="box-none">
-        <View
-          style={[
-            styles.itemContainer,
-            {
-              width: buttonWidth,
-              minHeight: buttonWidth,
-              [vPos]: vVal,
-              [hPos]: hVal,
-              flexDirection:
-                vPos.toLowerCase() === "bottom" ? "column" : "column-reverse",
-            },
-            itemContainerStyle,
-          ]}
-          pointerEvents="box-none">
-          {this.renderItems()}
-          {this.renderMenuButton()}
+  const buttonContainerChildren = (
+    <>
+      {itemElements}
+      {menuButton}
+    </>
+  );
+
+  return (
+    <View
+      style={[styles.container, containerStyle]}
+      pointerEvents="box-none"
+      accessibilityViewIsModal={dimmerActive}>
+      {renderButtonContainer ? (
+        renderButtonContainer(buttonContainerChildren, buttonContainerStyle)
+      ) : (
+        <View style={buttonContainerStyle} pointerEvents="box-none">
+          {buttonContainerChildren}
         </View>
-        {this.renderDimmer()}
-      </View>
-    );
-  };
-}
-
-// @ts-ignore
-FloatingMenu.defaultProps = {
-  items: [],
-  primaryColor: Colors.primaryColor,
-  position: MenuPositions.bottomRight,
-  openEase: t => --t * t * t + 1,
-  closeEase: t => t * t * t,
-  top: 38,
-  left: 38,
-  right: 38,
-  bottom: 38,
-  containerStyle: {},
-  itemContainerStyle: {},
-  buttonOuterStyle: {},
-  buttonTouchableStyle: {},
-  buttonInnerStyle: {},
+      )}
+      {dimmer}
+    </View>
+  );
 };
+
+export const FloatingMenu = React.memo(FloatingMenuComponent);

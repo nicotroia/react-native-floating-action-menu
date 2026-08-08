@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 import { Colors } from "@/constants";
 
-const globalStyles = StyleSheet.create({
+export const globalStyles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 20,
@@ -68,5 +68,3 @@ const globalStyles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-export default globalStyles;

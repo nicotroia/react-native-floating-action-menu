@@ -5,7 +5,14 @@
     "es6": true,
     "jest": true
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
@@ -14,16 +21,38 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["unused-imports", "prettier", "react", "jsx-a11y", "import"],
+  "plugins": [
+    "unused-imports",
+    "prettier",
+    "react",
+    "jsx-a11y",
+    "import"
+  ],
   "rules": {
-    "comma-dangle": ["warn", "always-multiline"],
+    "comma-dangle": [
+      "warn",
+      "always-multiline"
+    ],
     "no-unused-vars": 1,
     "no-unreachable": 1,
     "react/jsx-uses-vars": 1,
     "react/no-unknown-property": 0,
     "react/no-deprecated": 0,
-    "semi": ["error", "always"],
-    "semi-spacing": ["error", { "before": false, "after": true }]
+    "semi": [
+      "error",
+      "always"
+    ],
+    "semi-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "import/prefer-default-export": "off"
   },
-  "ignorePatterns": ["/node_modules/**/*", "/example/**/*"]
+  "ignorePatterns": [
+    "/node_modules/**/*",
+    "/example/**/*"
+  ]
 }

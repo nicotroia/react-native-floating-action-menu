@@ -12,21 +12,21 @@ import { applyButtonWidth } from "@/helpers";
 import { ItemConfig, Position } from "@/types";
 
 import styles from "./styles";
-import globalStyles from "@/styles";
+import { globalStyles } from "@/styles";
 
 export type FloatingItemProps = {
   item: ItemConfig;
   icon?: React.ReactNode;
   index: number;
   isOpen: boolean;
-  position: Position;
+  position?: Position;
   numItems: number;
   itemsDown: Record<number, boolean>;
   innerWidth: number;
   buttonWidth: number;
   primaryColor: string;
-  itemFanAnimations?: Record<number, Animated.AnimatedInterpolation<number>>;
-  itemPressAnimations?: Record<number, Animated.AnimatedInterpolation<number>>;
+  itemFanAnimations?: Record<number, Animated.Value>;
+  itemPressAnimations?: Record<number, Animated.Value>;
   backgroundUpColor?: string;
   backgroundDownColor?: string;
   borderColor?: string;
@@ -36,13 +36,13 @@ export type FloatingItemProps = {
   onPress: (event: GestureResponderEvent) => void;
 };
 
-export const FloatingItem: React.FC<FloatingItemProps> = props => {
+export const FloatingItemComponent: React.FC<FloatingItemProps> = props => {
   const {
     item,
     icon,
     index,
     isOpen,
-    position,
+    position = "bottom-right",
     numItems,
     itemsDown,
     innerWidth,
@@ -60,6 +60,7 @@ export const FloatingItem: React.FC<FloatingItemProps> = props => {
   } = props;
   const {
     label,
+    accessibilityLabel,
     labelStyle,
     isPending,
     isDisabled,
@@ -130,6 +131,7 @@ export const FloatingItem: React.FC<FloatingItemProps> = props => {
 
   let content = icon || (
     <Text
+      accessible={false}
       style={[
         globalStyles.missingIcon,
         { color: itemDown ? "#fff" : _iconColor || primaryColor },
@@ -146,13 +148,18 @@ export const FloatingItem: React.FC<FloatingItemProps> = props => {
         style={styles.activityIndicator}
       />
     );
+
   const borderColor = isDisabled
     ? `${_borderColor || primaryColor}80`
     : _borderColor || primaryColor;
 
+  const itemAccessibilityLabel =
+    accessibilityLabel ?? (typeof label === "string" ? label : undefined);
+
   return (
     <Animated.View
       key={`item-${index}`}
+      accessible={false}
       style={[
         globalStyles.buttonOuter,
         applyButtonWidth(buttonWidth),
@@ -168,8 +175,9 @@ export const FloatingItem: React.FC<FloatingItemProps> = props => {
         style,
       ]}
       {...rest}>
-      <View style={isDisabled && globalStyles.disabled}>
+      <View style={isDisabled ? globalStyles.disabled : undefined}>
         <Animated.Text
+          accessible={false}
           style={[
             globalStyles.text,
             styles.itemLabel,
@@ -186,6 +194,10 @@ export const FloatingItem: React.FC<FloatingItemProps> = props => {
         </Animated.Text>
 
         <TouchableWithoutFeedback
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={itemAccessibilityLabel}
+          accessibilityState={{ disabled: isDisabled || isPending }}
           style={[globalStyles.button, buttonStyle]}
           disabled={isDisabled || isPending || !isOpen}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
@@ -206,3 +218,5 @@ export const FloatingItem: React.FC<FloatingItemProps> = props => {
     </Animated.View>
   );
 };
+
+export const FloatingItem = React.memo(FloatingItemComponent);

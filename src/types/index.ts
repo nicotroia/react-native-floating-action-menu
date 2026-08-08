@@ -13,7 +13,9 @@ export type Position =
   | "bottom-left";
 
 export type ItemConfig = {
-  label: string;
+  label: React.ReactNode;
+  /** Override the label read by screen readers. Auto-derived from label if it is a plain string. */
+  accessibilityLabel?: string;
   labelStyle?: StyleProp<TextStyle>;
   isPending?: boolean;
   isDisabled?: boolean;
