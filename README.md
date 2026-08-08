@@ -1,8 +1,8 @@
 <div align="center">
   <h1>react-native-floating-action-menu</h1>
-  
-  <div>B-Y-O-I (bring your own icon) javascript component for react-native. No dependencies. Inspired by material-design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!</div>
-  
+
+  <div>B-Y-O-I (bring your own icon) component for React Native. No dependencies. Inspired by Material Design's Floating Action Button. Please customize to your needs and enjoy. PRs are welcome!</div>
+
   <br/>
 
   <img src="example/src/assets/readme-0.gif" alt="Floating Action Menu demo" height="480" />
@@ -10,78 +10,80 @@
 
 ## Installation
 
-```
-npm install --save react-native-floating-action-menu
+```sh
+npm install react-native-floating-action-menu
+# or
+pnpm add react-native-floating-action-menu
 ```
 
 ## Usage
 
-```JSX
-import { FloatingMenu } from 'react-native-floating-action-menu';
+```jsx
+import { FloatingMenu } from "react-native-floating-action-menu";
 
 const items = [
-  { label: 'Do a little dance' },
-  { label: 'Make a lil love' },
-  { label: 'Get down tonight' },
+  { label: "Do a little dance" },
+  { label: "Make a lil love" },
+  { label: "Get down tonight" },
 ];
 
 <FloatingMenu
   items={items}
-  isOpen={this.state.isMenuOpen}
-  onMenuToggle={this.handleMenuToggle}
-  onItemPress={this.handleItemPress}
-/>
+  isOpen={isMenuOpen}
+  onMenuToggle={setIsMenuOpen}
+  onItemPress={(item, index) => console.log("pressed", item)}
+/>;
 ```
 
 ## Item Config
 
-_FloatingItem_
+| Prop               | Description                                                                           | Type                     | Required |
+| ------------------ | ------------------------------------------------------------------------------------- | ------------------------ | -------- |
+| label              | Text to display alongside the button                                                  | `React.ReactNode`        | ✔︎        |
+| accessibilityLabel | Accessible label for screen readers. Defaults to `label` if it is a string.           | `string`                 |          |
+| labelStyle         | Style for the label Text element                                                      | `StyleProp<TextStyle>`   |          |
+| isPending          | Displays an ActivityIndicator in place of the icon                                    | `boolean`                |          |
+| isDisabled         | Disables the item                                                                     | `boolean`                |          |
+| onPress            | Callback when this item is pressed. Overrides the `onItemPress` prop on FloatingMenu. | `(event, index) => void` |          |
+| buttonStyle        | Style for the TouchableWithoutFeedback wrapper                                        | `StyleProp<ViewStyle>`   |          |
+| buttonInnerStyle   | Style for the inner animated view                                                     | `StyleProp<ViewStyle>`   |          |
+| containerStyle     | Style for the outer animated container                                                | `StyleProp<ViewStyle>`   |          |
 
-| Prop       | description                                                                                                                     | type     | required |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
-| label      | Text to display alongside button                                                                                                | string   | ✔︎      |
-| labelStyle | Style for the Text element                                                                                                      | object   |
-| isPending  | Will display ActivityIndicator in place of icon when `isPending` is true                                                        | boolean  |
-| isDisabled | Will disable the item when `isDisabled` is true                                                                                 | boolean  |
-| onPress    | Callback function called when this item is pressed. This will override the default `onItemPress` callback given to FloatingMenu | function |
-
-Example:
-
-```JSX
-{
-  label: 'Hello world',
-  isPending: false,
-  isDisabled: false,
-  onPress: (item, index) => {}, // (optional, can also be handled via `onItemPress`)
-  // Anything else you want goes here
-}
-```
+Any additional `ViewProps` are spread onto the outer container.
 
 ## Menu Config
 
-| Prop                | description                                                                                                                                                                                    | type           | default                             |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------- |
-| items               | Array of `Item`s (See above). Items are positioned by their order in this array and start closest to the menu button.                                                                          | FloatingItem[] | []                                  |
-| isOpen              | Control the menu open/closed state                                                                                                                                                             | boolean        | false                               |
-| position            | "top-left" \| "top-right" \| "bottom-left" \| "bottom-right"                                                                                                                                   | string         | "bottom-right"                      |
-| top                 | Position in px away from top edge                                                                                                                                                              | number         | 38                                  |
-| left                | Position in px away from left edge                                                                                                                                                             | number         | 38                                  |
-| right               | Position in px away from right edge                                                                                                                                                            | number         | 38                                  |
-| bottom              | Position in px away from bottom edge                                                                                                                                                           | number         | 38                                  |
-| primaryColor        | Hex color string used for backgrounds, borders, and icons                                                                                                                                      | string         | "#213A77"                           |
-| backgroundUpColor   | Override background color for menu and items UP state. Defaults to `#ffffff`.                                                                                                                  | string (hex)   | -                                   |
-| backgroundDownColor | Override background color for menu and items DOWN state. Defaults to `primaryColor` value.                                                                                                     | string (hex)   | -                                   |
-| borderColor         | Override border color for menu and items. Defaults to `primaryColor` value.                                                                                                                    | string (hex)   | -                                   |
-| iconColor           | Override icon color for menu and items. Defaults to `primaryColor` value.                                                                                                                      | string (hex)   | -                                   |
-| buttonWidth         | Width (and also height) of the button                                                                                                                                                          | number         | 50                                  |
-| innerWidth          | Width (and also height) of the inner element of the button                                                                                                                                     | number         | -                                   |
-| dimmerStyle         | Style the background dimmer element                                                                                                                                                            | object         | -                                   |
-| openEase            | Easing function used for the opening animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>`t => (--t) * t * t + 1`</pre> |
-| closeEase           | Easing function used for the closing animation (see [js easing functions](https://gist.github.com/gre/1650294))                                                                                | function       | <pre>t => t _ t _ t</pre>           |
-| renderMenuIcon      | Function used to render the icon for menu button. Receives current menu state as an argument. (see below example)                                                                              | function       | -                                   |
-| renderItemIcon      | Function used to render the icon for the items. Receives item, index, and current menu state as arguments. (see below example)                                                                 | function       | -                                   |
-| onMenuToggle        | Callback function called when the menu has been toggled open or closed. Receives a boolean value                                                                                               | function       | -                                   |
-| onItemPress         | Callback function called when a menu item has been pressed. Receives item and index. If an item specifies its own `onPress` function, it will take priority, and this function will be ignored | function       | -                                   |
+| Prop                  | Description                                                                                                                                     | Type                                                           | Default             |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------- |
+| items                 | Array of item configs (see above). Items are ordered starting closest to the menu button.                                                       | `ItemConfig[]`                                                 | `[]`                |
+| isOpen                | Controls the open/closed state                                                                                                                  | `boolean`                                                      | —                   |
+| position              | Corner to anchor the menu                                                                                                                       | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` | `"bottom-right"`    |
+| top                   | Distance from the top edge (px)                                                                                                                 | `number`                                                       | `38`                |
+| left                  | Distance from the left edge (px)                                                                                                                | `number`                                                       | `38`                |
+| right                 | Distance from the right edge (px)                                                                                                               | `number`                                                       | `38`                |
+| bottom                | Distance from the bottom edge (px)                                                                                                              | `number`                                                       | `38`                |
+| primaryColor          | Base color for borders, backgrounds, and icons                                                                                                  | `string`                                                       | `"#213A77"`         |
+| backgroundUpColor     | Button background in the unpressed state                                                                                                        | `string`                                                       | `"#ffffff"`         |
+| backgroundDownColor   | Button background in the pressed state                                                                                                          | `string`                                                       | `primaryColor`      |
+| borderColor           | Override border color                                                                                                                           | `string`                                                       | `primaryColor`      |
+| iconColor             | Override icon color                                                                                                                             | `string`                                                       | `primaryColor`      |
+| buttonWidth           | Width and height of each button                                                                                                                 | `number`                                                       | auto (responsive)   |
+| innerWidth            | Width and height of the inner button element                                                                                                    | `number`                                                       | `buttonWidth * 0.8` |
+| containerStyle        | Style for the outermost full-screen container                                                                                                   | `StyleProp<ViewStyle>`                                         | —                   |
+| itemContainerStyle    | Style for the column of buttons                                                                                                                 | `StyleProp<ViewStyle>`                                         | —                   |
+| buttonOuterStyle      | Style for the menu button's outer view                                                                                                          | `StyleProp<ViewStyle>`                                         | —                   |
+| buttonTouchableStyle  | Style for the menu button's touchable                                                                                                           | `StyleProp<ViewStyle>`                                         | —                   |
+| buttonInnerStyle      | Style for the menu button's inner animated view                                                                                                 | `StyleProp<ViewStyle>`                                         | —                   |
+| dimmerStyle           | Style for the background dimmer overlay                                                                                                         | `StyleProp<ViewStyle>`                                         | —                   |
+| openEase              | Easing function for the open animation                                                                                                          | `(t: number) => number`                                        | cubic ease-out      |
+| closeEase             | Easing function for the close animation                                                                                                         | `(t: number) => number`                                        | cubic ease-in       |
+| menuOpenLabel         | Accessibility label when the menu is closed                                                                                                     | `string`                                                       | `"Open menu"`       |
+| menuCloseLabel        | Accessibility label when the menu is open                                                                                                       | `string`                                                       | `"Close menu"`      |
+| renderMenuIcon        | Render prop for the menu button icon. Receives current render state.                                                                            | `(state: RenderState) => React.ReactNode`                      | —                   |
+| renderItemIcon        | Render prop for item icons. Receives item, index, and render state.                                                                             | `(item, index, state: RenderState) => React.ReactNode`         | —                   |
+| renderButtonContainer | Render prop that replaces the default button container `View`. Use this to position the menu with Reanimated or any external animation library. | `(children, style) => React.ReactElement`                      | —                   |
+| onMenuToggle          | Called when the menu button is pressed. Receives the new open state.                                                                            | `(open: boolean) => void`                                      | —                   |
+| onItemPress           | Called when an item is pressed. Receives the item and its index. Ignored if the item defines its own `onPress`.                                 | `(item: ItemConfig, index: number) => void`                    | —                   |
 
 ## Gif Demos
 
@@ -111,106 +113,73 @@ Example:
 
 ## Quick Start Example
 
-```JSX
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { FloatingMenu } from 'react-native-floating-action-menu';
+```jsx
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { FloatingMenu } from "react-native-floating-action-menu";
 
 const items = [
-  { label: 'Do a little dance' },
-  { label: 'Make a lil love' },
-  { label: 'Get down tonight' },
+  { label: "Do a little dance" },
+  { label: "Make a little love" },
+  { label: "Get down tonight" },
 ];
 
-class MyScreen extends React.Component {
-  state = {
-    isMenuOpen: false,
-  };
+export default function MyScreen() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  handleMenuToggle = isMenuOpen =>
-    this.setState({ isMenuOpen });
-
-  handleItemPress = (item, index) =>
-    console.log('pressed item', item);
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <FloatingMenu
-          isOpen={this.state.isMenuOpen}
-          items={items}
-          onMenuToggle={this.handleMenuToggle}
-          onItemPress={this.handleItemPress}
-        />
-      </View>
-    );
-  }
-};
+  return (
+    <View style={styles.container}>
+      <FloatingMenu
+        isOpen={isMenuOpen}
+        items={items}
+        onMenuToggle={setIsMenuOpen}
+        onItemPress={(item, index) => console.log("pressed item", item)}
+      />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-    position: 'relative',
+    flex: 1,
   },
 });
-
-export default MyScreen;
-
 ```
 
-## Example rendering icons (FontAwesome, regular Images)
+## Example with Custom Icons (FontAwesome, Images)
 
-```JSX
-import { Image } from 'react-native';
-import { FloatingMenu } from 'react-native-floating-action-menu';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faTimes, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+```jsx
+import { faBars, faTimes, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import React, { useState } from "react";
+import { Image, View } from "react-native";
+import { FloatingMenu } from "react-native-floating-action-menu";
 
-// Specify data required to render the icon
+const primaryColor = "#09f";
+
 const items = [
-  {
-    label: 'First is an icon',
-    fa: faUserPlus
-  },
-  {
-    label: 'Second is an image',
-    image: require('../assets/img-0.png')
-  },
+  { label: "Add user", fa: faUserPlus },
+  { label: "Gallery", image: require("../assets/img-0.png") },
 ];
-// Optional color to be silly
-const primaryColor = '#09f';
 
-class MyScreen extends React.Component {
-  state = {};
+export default function MyScreen() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  renderMenuIcon = (menuState) => {
-    const { menuButtonDown } = menuState;
+  const renderMenuIcon = ({ menuButtonDown }) => (
+    <FontAwesomeIcon
+      icon={isMenuOpen ? faTimes : faBars}
+      size={22}
+      color={menuButtonDown ? "#fff" : primaryColor}
+    />
+  );
 
-    return menuButtonDown
-      ? <Image source={require('./btn-down.png')} />
-      : <Image source={require('./btn-up.png')} />;
-  }
-
-  renderItemIcon = (item, index, menuState) => {
-    const { itemsDown, dimmerActive } = menuState;
-
-    const isItemPressed = itemsDown[index];
-    const color = isItemPressed ? '#fff' : primaryColor;
-
-    // Icons can be rendered however you like.
-    // Here are some examples, using data from the item object:
+  const renderItemIcon = (item, index, { itemsDown }) => {
+    const color = itemsDown[index] ? "#fff" : primaryColor;
 
     if (item.fa) {
-      return (
-        <FontAwesomeIcon
-          icon={item.fa}
-          size={25}
-          color={color}
-        />
-      );
+      return <FontAwesomeIcon icon={item.fa} size={22} color={color} />;
     }
-    else if (item.image) {
+    if (item.image) {
       return (
         <Image
           source={item.image}
@@ -219,28 +188,73 @@ class MyScreen extends React.Component {
         />
       );
     }
-
     return null;
   };
 
-  ...
+  return (
+    <View style={{ flex: 1 }}>
+      <FloatingMenu
+        isOpen={isMenuOpen}
+        items={items}
+        primaryColor={primaryColor}
+        onMenuToggle={setIsMenuOpen}
+        onItemPress={(item, index) => console.log("pressed", item.label)}
+        renderMenuIcon={renderMenuIcon}
+        renderItemIcon={renderItemIcon}
+      />
+    </View>
+  );
+}
+```
 
+## Example with Reanimated (dynamic position)
+
+Use `renderButtonContainer` to drive the menu position with Reanimated or any external animation library, without adding it as a dependency.
+
+```jsx
+import { FloatingMenu } from "react-native-floating-action-menu";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+export default function MyScreen() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const offsetY = useSharedValue(0);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: withSpring(offsetY.value) }],
+  }));
+
+  return (
+    <View style={{ flex: 1 }}>
+      <FloatingMenu
+        isOpen={isMenuOpen}
+        items={items}
+        onMenuToggle={setIsMenuOpen}
+        renderButtonContainer={(children, style) => (
+          <Animated.View
+            style={[style, animatedStyle]}
+            pointerEvents="box-none">
+            {children}
+          </Animated.View>
+        )}
+      />
+    </View>
+  );
+}
 ```
 
 ## Run Example
 
-- `git clone https://github.com/nicotroia/react-native-floating-action-menu`
-- `cd react-native-floating-action-menu/example`
-- `npm install`
-- `npm run ios` # or android
-
-## Develop
-
-- `npm pack`
-- `cd example`
-- `npm install ../react-native-floating-action-menu.tgz --save`
-- `npm run ios` # or android
+```sh
+git clone https://github.com/nicotroia/react-native-floating-action-menu
+cd react-native-floating-action-menu/example
+pnpm install
+pnpm start
+```
 
 ## License
 
-MIT © 2019-2024 [internet-nico](https://nicotroia.com)
+MIT © 2019-2026 [internet-nico](https://nicotroia.com)
