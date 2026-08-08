@@ -5,7 +5,7 @@
 
   <br/>
 
-  <img src="example/src/assets/readme-0.gif" alt="Floating Action Menu demo" height="480" />
+  <img src="example/assets/readme-0.gif" alt="Floating Action Menu demo" height="480" />
 </div>
 
 ## Installation
@@ -93,19 +93,19 @@ Any additional `ViewProps` are spread onto the outer container.
 <tr>
   <td width="25%">
     <p><b>Positions</b></p>
-    <img src="example/src/assets/readme-2.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+    <img src="example/assets/readme-2.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
   <td width="25%">
     <p><b>FontAwesome</b></p>
-    <img src="example/src/assets/readme-3.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+    <img src="example/assets/readme-3.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
   <td width="25%">
     <p><b>Colors</b></p>
-    <img src="example/src/assets/readme-4.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+    <img src="example/assets/readme-4.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
   <td width="25%">
     <p><b>List lengths</b></p>
-    <img src="example/src/assets/readme-5.gif" alt="Positions" height="auto" style="max-width: 100%;" />
+    <img src="example/assets/readme-5.gif" alt="Positions" height="auto" style="max-width: 100%;" />
   </td>
 </tr>
 </tbody>
